@@ -1,4 +1,6 @@
-<p>To jest przykładowa strona główna gry typu plemiona.</p>
-
-<?php
-phpinfo();
+<p>To jest przykładowa strona ToDoList.</p>
+<div class="container mt-5">
+  <div class="alert alert-success">
+    Działa, Bootstrap też działa !!! 🎉
+  </div>
+</div>
