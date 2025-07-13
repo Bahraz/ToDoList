@@ -18,5 +18,6 @@ $router->get('/app/ViewAllTask', 'AppController@viewTask');
 $router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
 $router->get('/app/AddTask', 'AppController@addTask');
 $router->get('/about', 'AppController@about');
+$router->get('/contact', 'AppController@contact');
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

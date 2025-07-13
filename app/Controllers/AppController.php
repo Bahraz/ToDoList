@@ -35,4 +35,12 @@ class AppController
 
         require __DIR__ . '/../views/layouts/footer.php';
     }
+
+    public function contact(){
+        require __DIR__ . '/../views/layouts/header.php';
+
+        require __DIR__ . '/../views/layouts/contact.php';
+
+        require __DIR__ . '/../views/layouts/footer.php';
+    }
 }
