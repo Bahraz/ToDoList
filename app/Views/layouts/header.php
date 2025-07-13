@@ -15,44 +15,41 @@
 </head>
 <body>
 <header>
-    <div class="container">
-      
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="/"><i class="bi bi-clipboard-check"></i> LOGO </a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Strona Główna</a>
-                        </li>
-                        <li class="nav-item">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ToDoList
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="nav-link" href="/app/AddTask">Dodaj zadanie</a></li>
-                                    <li><a class="nav-link" href="/app/ViewTodayTask">Dzisiejsze zadania</a></li>
-                                    <li><a class="nav-link" href="/app/ViewAllTask">Wszystkie zadania</a></li>
-                                    <li><hr class="dropdown-divider"></li>
+<nav class="navbar navbar-expand-lg navbar-light ">
+<div class="container justify-content-between">
 
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about">O Aplikacji</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/contact">Kontakt</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-    </div>  
+
+    <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+            <a class="navbar-brand" href="/">
+                <img src="/assets/images/favicon.svg" height="30" alt="Logo">
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    ToDoList
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="/app/AddTask">Add task</a></li>
+                    <li><a class="nav-link" href="/app/ViewTodayTask">Today tasks</a></li>
+                    <li><a class="nav-link" href="/app/ViewAllTask">All tasks</a></li>
+    </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/about">About us</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+        </li>
+    </ul>
+</div>
+</nav>
 </header>
 <main>
-
 <div class="container text-center py-5">
     <h1 class="mb-4">Welcome to To-Do App</h1>
