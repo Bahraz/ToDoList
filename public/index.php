@@ -17,5 +17,6 @@ $router->get('/home/index', 'HomeController@index');
 $router->get('/app/ViewAllTask', 'AppController@viewTask');
 $router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
 $router->get('/app/AddTask', 'AppController@addTask');
+$router->get('/about', 'AppController@about');
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

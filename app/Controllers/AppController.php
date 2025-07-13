@@ -26,4 +26,13 @@ class AppController
        
         require __DIR__ . '/../views/layouts/footer.php';
     }
+
+    public function about()
+    {
+        require __DIR__ . '/../views/layouts/header.php';
+
+        require __DIR__ . '/../views/layouts/about.php';
+
+        require __DIR__ . '/../views/layouts/footer.php';
+    }
 }

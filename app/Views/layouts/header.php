@@ -42,7 +42,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../layouts/about.php">O Aplikacji</a>
+                            <a class="nav-link" href="/about">O Aplikacji</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Kontakt</a>
