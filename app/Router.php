@@ -1,5 +1,5 @@
 <?php
-namespace Bahraz\SettlersWars\Core;
+namespace Bahraz\ToDoApp;
 
 class Router
 {
@@ -18,7 +18,7 @@ class Router
         if (isset($this->routes[$method][$path])) {
             [$controllerName, $action] = explode('@', $this->routes[$method][$path]);
 
-            $controllerClass = "Bahraz\\SettlersWars\\Controllers\\$controllerName";
+            $controllerClass = "Bahraz\\ToDoApp\\Controllers\\$controllerName";
             if (class_exists($controllerClass)) {
                 $controller = new $controllerClass();
                 if (method_exists($controller, $action)) {

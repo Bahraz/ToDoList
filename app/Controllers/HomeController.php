@@ -1,12 +1,17 @@
 <?php
-namespace Bahraz\SettlersWars\Controllers;
+namespace Bahraz\ToDoApp\Controllers;
 
-use Bahraz\SettlersWars\Core\Controller;
-
-class HomeController extends Controller
+class HomeController
 {
     public function index(): void
     {
-        $this->view('home/index', ['title' => 'Witamy w ToDoList!']);
+        // Załaduj nagłówek
+        require __DIR__ . '/../views/layouts/header.php';
+
+        // Załaduj główny widok strony głównej
+        require __DIR__ . '/../views/home/index.php';
+
+        // Załaduj stopkę
+        require __DIR__ . '/../views/layouts/footer.php';
     }
 }
