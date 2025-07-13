@@ -2,7 +2,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
-use Bahraz\SettlersWars\Core\Router;
+use Bahraz\ToDoApp\Router;
 
 // Load environment variables
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
@@ -14,6 +14,7 @@ $router = new Router();
 // Define routes
 $router->get('/', 'HomeController@index');
 $router->get('/home/index', 'HomeController@index');
+$router->get('/app', 'AppController@app');
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

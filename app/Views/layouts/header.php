@@ -16,18 +16,6 @@
 <body>
 <header>
     <div class="container">
-                                    <div class="btn-group">
-                                <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Danger
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Separated link</a></li>
-                                </ul>
-                            </div>
             <h1><?= htmlspecialchars($title ?? 'ToDoList') ?></h1>
         
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -41,19 +29,21 @@
                             <a class="nav-link" href="/">Strona Główna</a>
                         </li>
                         <li class="nav-item">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ToDoList
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="nav-link" href="/layouts/about">Dodaj zadanie</a></li>
+                                    <li><a class="nav-link" href="/home/index">Dzisiejsze zadania</a></li>
+                                    <li><a class="nav-link" href="/about">Wszystkie zadania</a></li>
+                                    <li><hr class="dropdown-divider"></li>
 
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link" href="/home/index">Dodaj zadanie</a>
-                        </li>  
-                        <li class="nav-item">
-                            <a class="nav-link" href="/home/index">Dzisiejsze zadania</a>
-                        </li>           
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about">Wszystkie zadania</a>
+                                </ul>
+                            </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/contact">O Aplikacji</a>
+                            <a class="nav-link" href="../layouts/about.php">O Aplikacji</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/contact">Kontakt</a>

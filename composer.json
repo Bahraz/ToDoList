@@ -1,10 +1,10 @@
 {
-    "name": "bahraz/settlers-wars",
+    "name": "bahraz/to-do-app",
     "description": "Browser strategy game in PHP (MVC)",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Bahraz\\SettlersWars\\": "app/"
+            "Bahraz\\ToDoApp\\": "app/"
         }
     },
     "authors": [
