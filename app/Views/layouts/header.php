@@ -16,10 +16,9 @@
 <body>
 <header>
     <div class="container">
-            <h1><?= htmlspecialchars($title ?? 'ToDoList') ?></h1>
-        
+      
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="/"> LOGO </a>
+                    <a class="navbar-brand" href="/"><i class="bi bi-clipboard-check"></i> LOGO </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
@@ -34,9 +33,9 @@
                                     ToDoList
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="nav-link" href="/layouts/about">Dodaj zadanie</a></li>
-                                    <li><a class="nav-link" href="/home/index">Dzisiejsze zadania</a></li>
-                                    <li><a class="nav-link" href="/about">Wszystkie zadania</a></li>
+                                    <li><a class="nav-link" href="/app/AddTask">Dodaj zadanie</a></li>
+                                    <li><a class="nav-link" href="/app/ViewTodayTask">Dzisiejsze zadania</a></li>
+                                    <li><a class="nav-link" href="/app/ViewAllTask">Wszystkie zadania</a></li>
                                     <li><hr class="dropdown-divider"></li>
 
                                 </ul>
@@ -54,3 +53,6 @@
     </div>  
 </header>
 <main>
+
+<div class="container text-center py-5">
+    <h1 class="mb-4">Welcome to To-Do App</h1>

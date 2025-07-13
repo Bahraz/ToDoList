@@ -1,3 +1,5 @@
+<div class="container text-center py-5">
+
 <h2 class="mb-4">Twoje zadania</h2>
 
 <ul class="list-group">
@@ -11,3 +13,5 @@
     </li>
   <?php endforeach; ?>
 </ul>
+
+</div

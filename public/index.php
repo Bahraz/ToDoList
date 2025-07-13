@@ -14,7 +14,8 @@ $router = new Router();
 // Define routes
 $router->get('/', 'HomeController@index');
 $router->get('/home/index', 'HomeController@index');
-$router->get('/app', 'AppController@app');
-
+$router->get('/app/ViewAllTask', 'AppController@viewTask');
+$router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
+$router->get('/app/AddTask', 'AppController@addTask');
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);
