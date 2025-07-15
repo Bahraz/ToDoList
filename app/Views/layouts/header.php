@@ -38,6 +38,8 @@
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="/app/AddTask">Add task</a></li>
                     <li><a class="nav-link" href="/app/ViewTodayTask">Today tasks</a></li>
+                    <li><a class="nav-link" href="/app/ViewAllActiveTask">All active tasks</a></li>
+                    <li><a class="nav-link" href="/app/ViewAllCompletedTask">All completed tasks</a></li>
                     <li><a class="nav-link" href="/app/ViewAllTask">All tasks</a></li>
     </ul>
             </div>
