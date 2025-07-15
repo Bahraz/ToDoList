@@ -3,44 +3,31 @@ namespace Bahraz\ToDoApp\Controllers;
 
 use Bahraz\ToDoApp\Models\Task;
 
-class AppController
+class AppController extends BaseController
 {
+    public function index(): void
+    {
+        $this->render('home/index');
+    }
+    
     public function viewTask(): void
     {
         $tasks = Task::getAll();
-        // Załaduj nagłówek
-        require __DIR__ . '/../views/layouts/header.php';
-
-        // Załaduj główny widok strony głównej
-        require __DIR__ . '/../views/components/viewTaskComponent.php';
-
-        // Załaduj stopkę
-        require __DIR__ . '/../views/layouts/footer.php';
+        $this->render('components/viewTaskComponent', ['tasks' => $tasks]);
     }
 
     public function addTask(): void
     {
-        require __DIR__ . '/../views/layouts/header.php';
-
-        require __DIR__ . '/../views/components/addTaskComponent.php';
-       
-        require __DIR__ . '/../views/layouts/footer.php';
+        $this->render('components/addTaskComponent');
     }
 
-    public function about()
+    public function about(): void
     {
-        require __DIR__ . '/../views/layouts/header.php';
-
-        require __DIR__ . '/../views/layouts/about.php';
-
-        require __DIR__ . '/../views/layouts/footer.php';
+        $this->render('layouts/about');
     }
 
-    public function contact(){
-        require __DIR__ . '/../views/layouts/header.php';
-
-        require __DIR__ . '/../views/layouts/contact.php';
-
-        require __DIR__ . '/../views/layouts/footer.php';
+    public function contact(): void
+    {
+        $this->render('layouts/contact');
     }
 }
