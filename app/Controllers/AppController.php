@@ -3,27 +3,31 @@ namespace Bahraz\ToDoApp\Controllers;
 
 use Bahraz\ToDoApp\Models\Task;
 
-class AppController
+class AppController extends BaseController
 {
+    public function index(): void
+    {
+        $this->render('home/index');
+    }
+    
     public function viewTask(): void
     {
         $tasks = Task::getAll();
-        // Załaduj nagłówek
-        require __DIR__ . '/../views/layouts/header.php';
-
-        // Załaduj główny widok strony głównej
-        require __DIR__ . '/../views/components/viewTaskComponent.php';
-
-        // Załaduj stopkę
-        require __DIR__ . '/../views/layouts/footer.php';
+        $this->render('components/viewTaskComponent', ['tasks' => $tasks]);
     }
 
     public function addTask(): void
     {
-        require __DIR__ . '/../views/layouts/header.php';
+        $this->render('components/addTaskComponent');
+    }
 
-        require __DIR__ . '/../views/components/addTaskComponent.php';
-       
-        require __DIR__ . '/../views/layouts/footer.php';
+    public function about(): void
+    {
+        $this->render('layouts/about');
+    }
+
+    public function contact(): void
+    {
+        $this->render('layouts/contact');
     }
 }

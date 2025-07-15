@@ -12,10 +12,12 @@ $dotenv->load();
 $router = new Router();
 
 // Define routes
-$router->get('/', 'HomeController@index');
-$router->get('/home/index', 'HomeController@index');
+$router->get('/', 'AppController@index');
+$router->get('/home/index', 'AppController@index');
 $router->get('/app/ViewAllTask', 'AppController@viewTask');
 $router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
 $router->get('/app/AddTask', 'AppController@addTask');
+$router->get('/about', 'AppController@about');
+$router->get('/contact', 'AppController@contact');
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);
