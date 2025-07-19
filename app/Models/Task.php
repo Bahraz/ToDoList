@@ -12,7 +12,7 @@ class Task
                 'title' => 'Buy groceries',
                 'completed' => false,
                 'priority' => 'low',
-                'date' => '2025-07-20',
+                'date' => '2025-07-19',
             ],
             [
                 'id' => 2,
