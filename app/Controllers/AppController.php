@@ -30,10 +30,10 @@ class AppController extends BaseController
         $today = date('Y-m-d');
         $tasks = Task::getAll();
 
-        $todayTasks = array_filter($tasks, function ($task) use ($today) {
-            return $task['date'] === $today;
+        $todayActiveTasks = array_filter($tasks, function ($task) use ($today) {
+            return !$task['completed'] && $task['date'] === $today;
         });
-        $this->render('components/viewTaskComponent', ['tasks' => $todayTasks]);
+        $this->render('components/viewTaskComponent', ['tasks' => $todayActiveTasks]);
     }
     public function viewActiveTask(): void
     {
