@@ -10,6 +10,11 @@ class Router
         $this->routes['GET'][$this->normalizePath($path)] = $controllerAction;
     }
 
+    public function post(string $path, string $controllerAction): void
+    {
+        $this->routes['POST'][$this->normalizePath($path)] = $controllerAction;
+    }
+
     public function dispatch(string $uri): void
     {
         $path = $this->normalizePath(parse_url($uri, PHP_URL_PATH));

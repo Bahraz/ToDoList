@@ -4,9 +4,12 @@ namespace Bahraz\ToDoApp\Models;
 
 class Task
 {
-    public static function getAll()
-    {
-        return [
+public static function getAll()
+{
+    session_start();
+
+    if (!isset($_SESSION['tasks'])) {
+        $_SESSION['tasks'] = [
             [
                 'id' => 1,
                 'title' => 'Buy groceries',
@@ -21,7 +24,7 @@ class Task
                 'priority' => 'high',
                 'date' => '2025-07-15',
             ],
-                        [
+            [
                 'id' => 32,
                 'title' => 'Go to the gym',
                 'completed' => false,
@@ -44,4 +47,8 @@ class Task
             ],
         ];
     }
+
+    return $_SESSION['tasks'];
+}
+
 }

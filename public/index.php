@@ -11,15 +11,21 @@ $dotenv->load();
 // Initialize router
 $router = new Router();
 
-// Define routes
+// Define routes for the application
 $router->get('/', 'AppController@index');
 $router->get('/home/index', 'AppController@index');
-$router->get('/app/AddTask', 'AppController@addTask');
+$router->get('/app/AddTaskForm', 'AppController@addTaskForm');
 $router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
 $router->get('/app/ViewActiveTask', 'AppController@viewActiveTask');
 $router->get('/app/ViewCompletedTask', 'AppController@viewCompletedTask');
 $router->get('/app/ViewTask', 'AppController@viewTask');
 $router->get('/about', 'AppController@about');
 $router->get('/contact', 'AppController@contact');
+
+//Define routes for the actions
+$router->post('/app/AddTask', 'AppController@addTask');
+$router->post('/app/CompleteTask', 'AppController@completeTask');
+$router->post('/app/DeleteTask', 'AppController@deleteTask');
+
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);
