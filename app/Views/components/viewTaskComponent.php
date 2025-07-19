@@ -18,7 +18,8 @@
                 </div>
               </div>
               <div class="d-flex align-items-center">
-                <form method="post" action="complete.php" class="me-2">
+                <form method="post" action="/app/CompleteTask" class="me-2">
+                  <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
                   <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
                   <button type="submit" class="btn btn-sm btn-success">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16" style="margin-bottom: 3px;">
@@ -27,7 +28,8 @@
                   </button>
                 </form>
 
-                <form method="post" action="delete.php">
+                <form method="post" action="/app/DeleteTask" class="ms-2">
+                  <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
                   <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
                   <button type="submit" class="btn btn-sm btn-danger">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" style="margin-bottom: 3px;">

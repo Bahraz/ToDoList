@@ -1,8 +1,8 @@
-<form class="row justify-content-center mb-5">
+<form class="row justify-content-center mb-5" method="POST" action="/app/AddTask">
   <div class="col-md-6 col-sm-8">
     <label for="task-input" class="form-label">Add a new task</label>
     <div class="input-group mb-3">
-      <input type="text" id="task-input" class="form-control" placeholder="Enter a new task" required>
+      <input type="text" name="tittle" id="task-input" class="form-control" placeholder="Enter a new task" required>
       <button class="btn btn-primary" type="submit">Add</button>    
     </div>
     <div class="row">
@@ -17,7 +17,7 @@
       <div class="col-md-6">
         <label for="task-date" class="form-label">Select a date</label>
         <div class="input-group">
-          <input type="text" id="task-date" class="form-control" placeholder="YYYY-MM-DD" required>
+          <input type="text" name="date" id="task-date" class="form-control" placeholder="YYYY-MM-DD" required>
           <div class="btn btn-info" id="open-flatpickr" role="button" tabindex="0">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16" style=" margin-bottom: 4px;">
               <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
