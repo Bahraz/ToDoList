@@ -29,5 +29,8 @@ $router->post('/app/CompleteTask', 'AppController@completeTask');
 $router->post('/app/DeleteTask', 'AppController@deleteTask');
 $router->post('/app/UncompleteTask', 'AppController@unCompleteTask');
 
+// Define API routes
+$router->get('/api/tasks', 'ApiController@index');
+
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

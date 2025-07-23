@@ -27,7 +27,7 @@ public static function getAll()
                 'deleted' => false,
             ],
             [
-                'id' => 32,
+                'id' => 3,
                 'title' => 'Go to the gym',
                 'completed' => false,
                 'priority' => 'normal',
