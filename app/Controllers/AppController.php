@@ -31,7 +31,7 @@ class AppController extends BaseController
         $tasks = Task::getAll();
 
         $todayActiveTasks = array_filter($tasks, function ($task) use ($today) {
-            return !$task['completed'] && $task['date'] === $today;
+            return !$task['completed'] && $task['date'] === $today && !$task['deleted'];
         });
         $this->render('components/viewTaskComponent', ['tasks' => $todayActiveTasks]);
     }
@@ -39,7 +39,7 @@ class AppController extends BaseController
     {
         $tasks = Task::getAll();
         $activeTasks = array_filter($tasks, function ($task) {
-            return !$task['completed'];
+            return !$task['completed']&& !$task['deleted'];
         });
         $this->render('components/viewTaskComponent', ['tasks' => $activeTasks]);
     }
@@ -48,7 +48,7 @@ class AppController extends BaseController
     {
         $tasks = Task::getAll();
         $completedTasks = array_filter($tasks, function ($task) {
-            return $task['completed'] === true;
+            return $task['completed'] === true && !$task['deleted'];
         });
         $this->render('components/viewTaskComponent', ['tasks' => $completedTasks]);
     }
@@ -56,7 +56,19 @@ class AppController extends BaseController
     public function viewTask(): void
     {
         $tasks = Task::getAll();
-        $this->render('components/viewTaskComponent', ['tasks' => $tasks]);
+        $notDeletedTasks = array_filter($tasks, function ($task) {
+            return !$task['deleted'];
+        });
+        $this->render('components/viewTaskComponent', ['tasks' => $notDeletedTasks]);
+    }
+
+    public function viewDeletedTask(): void
+    {
+        $tasks = Task::getAll();
+        $deletedTasks = array_filter($tasks, function ($task) {
+            return $task['deleted'] === true;
+        });
+        $this->render('components/viewTaskComponent', ['tasks' => $deletedTasks]);
     }
 
     public function addTask(): void
@@ -81,6 +93,7 @@ class AppController extends BaseController
                 'completed' => false,
                 'priority' => $priority,
                 'date' => $date,
+                'deleted' => false,
             ];
 
             $tasks[] = $newTask;
@@ -119,6 +132,33 @@ class AppController extends BaseController
         exit;
     }
 
+    public function unCompleteTask()
+    {
+        session_start();
+
+        $redirect = $_POST['redirect'] ?? '/app/ViewCompletedTask';
+        $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
+
+        if (!$taskId) {
+            header('Location: /app/ViewCompletedTask');
+            exit;
+        }
+
+        $tasks = $_SESSION['tasks'] ?? [];
+
+        foreach ($tasks as &$task) {
+            if ($task['id'] === $taskId) {
+                $task['completed'] = false;
+                break;
+            }
+        }
+        unset($task);
+
+        $_SESSION['tasks'] = $tasks;   
+        header("Location: $redirect");
+        exit;
+    }
+
     public function deleteTask()
     {
         session_start();
@@ -133,12 +173,13 @@ class AppController extends BaseController
 
         $tasks = $_SESSION['tasks'] ?? [];
 
-        foreach ($tasks as $key => $task) {
+        foreach ($tasks as &$task) {
             if ($task['id'] === $taskId) {
-                unset($tasks[$key]);
-                break;
-            }
+            $task['deleted'] = true;
+            break;
+            }   
         }
+        unset($task);
 
         $_SESSION['tasks'] = array_values($tasks);
         header("Location: $redirect");

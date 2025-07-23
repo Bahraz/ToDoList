@@ -41,6 +41,7 @@
                     <li><a class="nav-link" href="/app/ViewActiveTask">Active tasks</a></li>
                     <li><a class="nav-link" href="/app/ViewCompletedTask">Completed tasks</a></li>
                     <li><a class="nav-link" href="/app/ViewTask">All tasks</a></li>
+                    <li><a class="nav-link" href="/app/ViewDeletedTask">Deleted tasks</a></li>
     </ul>
             </div>
         </li>
