@@ -19,6 +19,7 @@ $router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
 $router->get('/app/ViewActiveTask', 'AppController@viewActiveTask');
 $router->get('/app/ViewCompletedTask', 'AppController@viewCompletedTask');
 $router->get('/app/ViewTask', 'AppController@viewTask');
+$router->get('/app/ViewDeletedTask', 'AppController@viewDeletedTask');
 $router->get('/about', 'AppController@about');
 $router->get('/contact', 'AppController@contact');
 
@@ -26,6 +27,7 @@ $router->get('/contact', 'AppController@contact');
 $router->post('/app/AddTask', 'AppController@addTask');
 $router->post('/app/CompleteTask', 'AppController@completeTask');
 $router->post('/app/DeleteTask', 'AppController@deleteTask');
+$router->post('/app/UncompleteTask', 'AppController@unCompleteTask');
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

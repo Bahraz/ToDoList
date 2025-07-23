@@ -16,6 +16,7 @@ public static function getAll()
                 'completed' => false,
                 'priority' => 'low',
                 'date' => '2025-07-19',
+                'deleted' => false,
             ],
             [
                 'id' => 2,
@@ -23,6 +24,7 @@ public static function getAll()
                 'completed' => false,
                 'priority' => 'high',
                 'date' => '2025-07-15',
+                'deleted' => false,
             ],
             [
                 'id' => 32,
@@ -30,6 +32,7 @@ public static function getAll()
                 'completed' => false,
                 'priority' => 'normal',
                 'date' => '2025-07-15',
+                'deleted' => false,
             ],
             [
                 'id' => 4,
@@ -37,6 +40,7 @@ public static function getAll()
                 'completed' => true,
                 'priority' => 'high',
                 'date' => '2025-07-10',
+                'deleted' => false,
             ],
             [
                 'id' => 5,
@@ -44,6 +48,7 @@ public static function getAll()
                 'completed' => true,
                 'priority' => 'low',
                 'date' => '2025-07-25',
+                'deleted' => false,
             ],
         ];
     }
