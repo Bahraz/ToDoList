@@ -15,6 +15,8 @@ class AppController extends BaseController
         $this->render('layouts/about');
     }
 
+    
+
     public function contact(): void
     {
         $this->render('layouts/contact');
@@ -71,43 +73,45 @@ class AppController extends BaseController
         $this->render('components/viewTaskComponent', ['tasks' => $deletedTasks]);
     }
 
-    public function addTask(): void
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // public function addTask(): void
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $title= $_POST['tittle'] ?? '';
-            $priority = $_POST['priority'] ?? 'normal';
-            $date = $_POST['date'] ?? date('Y-m-d');
+    //         $title= $_POST['title'] ?? '';
+    //         $priority = $_POST['priority'] ?? 'normal';
+    //         $date = $_POST['date'] ?? date('Y-m-d');
 
-            $tasks=Task::getAll();
-            $maxID = 0;
-            foreach ($tasks as $task) {
-                if ($task['id'] > $maxID) {
-                    $maxID = $task['id'];
-                }
-            }
+    //         $tasks=Task::getAll();
+    //         $maxID = 0;
+    //         foreach ($tasks as $task) {
+    //             if ($task['id'] > $maxID) {
+    //                 $maxID = $task['id'];
+    //             }
+    //         }
 
-            $newTask = [
-                'id' => $maxID + 1,
-                'title' => $title,
-                'completed' => false,
-                'priority' => $priority,
-                'date' => $date,
-                'deleted' => false,
-            ];
+    //         $newTask = [
+    //             'id' => $maxID + 1,
+    //             'title' => $title,
+    //             'completed' => false,
+    //             'priority' => $priority,
+    //             'date' => $date,
+    //             'deleted' => false,
+    //         ];
 
-            $tasks[] = $newTask;
+    //         $tasks[] = $newTask;
 
-            $_SESSION['tasks'] = $tasks;
+    //         $_SESSION['tasks'] = $tasks;
 
-            header('Location: /app/ViewActiveTask');
-            exit;
-        }
-    }
+    //         header('Location: /app/ViewActiveTask');
+    //         exit;
+    //     }
+    // }
 
     public function completeTask()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         $redirect = $_POST['redirect'] ?? '/app/ViewAllTask';
         $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
@@ -134,7 +138,9 @@ class AppController extends BaseController
 
     public function unCompleteTask()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         $redirect = $_POST['redirect'] ?? '/app/ViewCompletedTask';
         $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
@@ -161,7 +167,9 @@ class AppController extends BaseController
 
     public function deleteTask()
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         $redirect = $_POST['redirect'] ?? '/app/ViewAllTask';
         $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
