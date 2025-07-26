@@ -2,7 +2,7 @@
   <div class="col-md-6 col-sm-8">
     <label for="task-input" class="form-label">Add a new task</label>
     <div class="input-group mb-3">
-      <input type="text" name="tittle" id="task-input" class="form-control" placeholder="Enter a new task" required>
+      <input type="text" name="title" id="task-input" class="form-control" placeholder="Enter a new task" required>
       <button class="btn btn-primary" type="submit">Add</button>    
     </div>
     <div class="row">
