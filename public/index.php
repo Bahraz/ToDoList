@@ -23,15 +23,12 @@ $router->get('/app/ViewDeletedTask', 'AppController@viewDeletedTask');
 $router->get('/about', 'AppController@about');
 $router->get('/contact', 'AppController@contact');
 
-//Define routes for the actions
-// $router->post('/app/AddTask', 'AppController@addTask');
-$router->post('/app/CompleteTask', 'AppController@completeTask');
-$router->post('/app/DeleteTask', 'AppController@deleteTask');
-$router->post('/app/UncompleteTask', 'AppController@unCompleteTask');
-
 // Define API routes
 $router->get('/api/tasks', 'ApiController@index');
 $router->post('/app/AddTask', 'ApiController@addTask');
+$router->post('/app/CompleteTask', 'ApiController@completeTask');
+$router->post('/app/UncompleteTask', 'ApiController@unCompleteTask');
+$router->post('/app/DeleteTask', 'ApiController@deleteTask');
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);

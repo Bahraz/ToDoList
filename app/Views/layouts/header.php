@@ -56,5 +56,11 @@
 </nav>
 </header>
 <main>
+    <?php if (!empty($_SESSION['flash_message'])): ?>
+    <div class="alert alert-success text-center">
+        <?= htmlspecialchars($_SESSION['flash_message']); ?>
+    </div>
+    <?php unset($_SESSION['flash_message']); ?>
+<?php endif; ?>
 <div class="container text-center py-5">
     <h1 class="mb-4">Welcome to To-Do App</h1>
