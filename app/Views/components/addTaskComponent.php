@@ -1,4 +1,4 @@
-<form class="row justify-content-center mb-5" method="POST" action="/app/AddTask">
+<form class="row justify-content-center mb-5" id="add-task-form">
   <div class="col-md-6 col-sm-8">
     <label for="task-input" class="form-label">Add a new task</label>
     <div class="input-group mb-3">
@@ -30,3 +30,33 @@
     </div>
   </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('add-task-form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/api/AddTask', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        window.location.href = '/app/ViewActiveTask';
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Error adding task');
+      }
+    } catch (err) {
+      alert('A network error occurred.');
+      console.error(err);
+    }
+  });
+});
+</script>
+
