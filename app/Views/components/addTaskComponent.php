@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        window.location.href = '/app/ViewActiveTask';
+        window.location.href = '/tasks/view/active';
       } else {
         const data = await response.json();
         alert(data.message || 'Error adding task');

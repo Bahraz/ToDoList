@@ -36,12 +36,12 @@
                     ToDoList
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="/app/AddTaskForm">Add task</a></li>
-                    <li><a class="nav-link" href="/app/ViewTodayTask">Today tasks</a></li>
-                    <li><a class="nav-link" href="/app/ViewActiveTask">Active tasks</a></li>
-                    <li><a class="nav-link" href="/app/ViewCompletedTask">Completed tasks</a></li>
-                    <li><a class="nav-link" href="/app/ViewTask">All tasks</a></li>
-                    <li><a class="nav-link" href="/app/ViewDeletedTask">Deleted tasks</a></li>
+                    <li><a class="nav-link" href="/tasks/form/add">Add task</a></li>
+                    <li><a class="nav-link" href="/tasks/view/today">Today tasks</a></li>
+                    <li><a class="nav-link" href="/tasks/view/active">Active tasks</a></li>
+                    <li><a class="nav-link" href="/tasks/view/completed">Completed tasks</a></li>
+                    <li><a class="nav-link" href="/tasks/view/all">All tasks</a></li>
+                    <li><a class="nav-link" href="/tasks/view/deleted">Deleted tasks</a></li>
     </ul>
             </div>
         </li>
