@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch('/app/AddTask', {
+      const response = await fetch('/api/AddTask', {
         method: 'POST',
         body: formData
       });

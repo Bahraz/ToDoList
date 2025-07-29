@@ -25,10 +25,10 @@ $router->get('/contact', 'AppController@contact');
 
 // Define API routes
 $router->get('/api/tasks', 'ApiController@index');
-$router->post('/app/AddTask', 'ApiController@addTask');
-$router->post('/app/CompleteTask', 'ApiController@completeTask');
-$router->post('/app/UncompleteTask', 'ApiController@unCompleteTask');
-$router->post('/app/DeleteTask', 'ApiController@deleteTask');
+$router->post('/api/AddTask', 'ApiController@addTask');
+$router->post('/api/CompleteTask', 'ApiController@completeTask');
+$router->post('/api/UncompleteTask', 'ApiController@unCompleteTask');
+$router->post('/api/DeleteTask', 'ApiController@deleteTask');
 
 // Dispatch request
 $router->dispatch($_SERVER['REQUEST_URI']);
