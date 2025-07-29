@@ -11,15 +11,23 @@ $dotenv->load();
 // Initialize router
 $router = new Router();
 
+$requestUri = $_SERVER['REQUEST_URI'];
+
+$path = parse_url($requestUri, PHP_URL_PATH);
+$segments = explode('/', trim($path, '/'));
+
+if (count($segments) === 3 && $segments[0] === 'tasks' && $segments[1] === 'view') {
+        $status = $segments[2];
+    
+        $controller = new Bahraz\ToDoApp\Controllers\AppController();
+        $controller->viewTask($status);
+        exit;
+    }
+    
 // Define routes for the application
 $router->get('/', 'AppController@index');
 $router->get('/home/index', 'AppController@index');
-$router->get('/app/AddTaskForm', 'AppController@addTaskForm');
-$router->get('/app/ViewTodayTask', 'AppController@viewTodayTask');
-$router->get('/app/ViewActiveTask', 'AppController@viewActiveTask');
-$router->get('/app/ViewCompletedTask', 'AppController@viewCompletedTask');
-$router->get('/app/ViewTask', 'AppController@viewTask');
-$router->get('/app/ViewDeletedTask', 'AppController@viewDeletedTask');
+$router->get('/tasks/form/add', 'AppController@addTaskForm');
 $router->get('/about', 'AppController@about');
 $router->get('/contact', 'AppController@contact');
 

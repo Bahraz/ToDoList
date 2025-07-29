@@ -32,8 +32,6 @@ class AppController extends BaseController
         $this->render('layouts/about');
     }
 
-    
-
     public function contact(): void
     {
         $this->render('layouts/contact');
@@ -44,29 +42,9 @@ class AppController extends BaseController
         $this->render('components/addTaskComponent');
     }
 
-    public function viewTodayTask(): void
+    public function viewTask(string $status = 'all'): void
     {
-    $this->render('components/viewTaskComponent', ['status' => 'today']);
+        $this->render('components/viewTaskComponent', ['status' => $status]);
     }
-    public function viewActiveTask(): void
-    {
-        $this->render('components/viewTaskComponent', ['status' => 'active']);
-    }
-
-    public function viewCompletedTask(): void
-    {
-        $this->render('components/viewTaskComponent', ['status' => 'completed']);
-    }
-
-    public function viewTask(): void
-    {
-        $this->render('components/viewTaskComponent', ['status' => 'default']);
-    }
-
-    public function viewDeletedTask(): void
-    {
-        $this->render('components/viewTaskComponent', ['status' => 'deleted']);
-    }
-
 }
 

@@ -23,8 +23,14 @@ class ApiController
         $tasks = Task::getAll();
 
         switch ($status) {
+            case 'all':
+                $tasks = array_filter($tasks, fn($task) => !$task['deleted']);
             case 'active':
                 $tasks = array_filter($tasks, fn($task) => !$task['completed'] && !$task['deleted']);
+                break;
+            case 'today':
+                $today = date('Y-m-d');
+                $tasks = array_filter($tasks, fn($task) => !$task['completed'] && $task['date'] === $today && !$task['deleted']);
                 break;
             case 'completed':
                 $tasks = array_filter($tasks, fn($task) => $task['completed'] && !$task['deleted']);
@@ -32,12 +38,6 @@ class ApiController
             case 'deleted':
                 $tasks = array_filter($tasks, fn($task) => $task['deleted']);
                 break;
-            case 'today':
-                $today = date('Y-m-d');
-                $tasks = array_filter($tasks, fn($task) => !$task['completed'] && $task['date'] === $today && !$task['deleted']);
-                break;
-            default:
-                $tasks = array_filter($tasks, fn($task) => !$task['deleted']);
             }
         echo json_encode(array_values($tasks), JSON_PRETTY_PRINT);
     }
