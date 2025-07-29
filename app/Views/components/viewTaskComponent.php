@@ -2,7 +2,7 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
     <ul class="list-group" id="task-list">
-      <li class="list-group-item text-center">Ładowanie zadań...</li>
+      <li class="list-group-item text-center">Loading tasks...</li>
     </ul>
   </div>
 </div>
@@ -11,7 +11,7 @@
 const taskStatus = <?=json_encode($status ?? 'all') ?>;
 document.addEventListener('DOMContentLoaded', async () => {
     const listEl = document.getElementById('task-list');
-    listEl.innerHTML = '<li class="list-group-item text-center">Ładowanie zadań...</li>';
+    listEl.innerHTML = '<li class="list-group-item text-center">Loading tasks...</li>';
 
     try {
         const response = await fetch(`/api/tasks?status=${encodeURIComponent(taskStatus)}`); // podmień URL na swój endpoint API
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const tasks = await response.json();
 
         if (!tasks.length) {
-            listEl.innerHTML = '<li class="list-group-item text-center">Brak zadań do wyświetlenia</li>';
+            listEl.innerHTML = '<li class="list-group-item text-center">No tasks to display</li>';
             return;
         }
 
