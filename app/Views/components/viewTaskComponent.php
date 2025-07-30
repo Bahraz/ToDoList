@@ -92,35 +92,32 @@ async function loadTasks() {
 
 document.addEventListener('click', async function (e) {
   const btn = e.target.closest('button');
-
   if (!btn) return;
 
   const taskId = btn.dataset.id;
 
   if (btn.classList.contains('complete-task')) {
-    await fetch('/api/CompleteTask', {
-      method: 'POST',
-      body: new URLSearchParams({ task_id: taskId })
+    await fetch(`/api/CompleteTask/${taskId}`, {
+      method: 'PATCH',
     });
     loadTasks();
   }
 
   if (btn.classList.contains('uncomplete-task')) {
-    await fetch('/api/UncompleteTask', {
-      method: 'POST',
-      body: new URLSearchParams({ task_id: taskId })
+    await fetch(`/api/UncompleteTask/${taskId}`, {
+      method: 'PATCH',
     });
     loadTasks();
   }
 
   if (btn.classList.contains('delete-task')) {
-    await fetch('/api/DeleteTask', {
-      method: 'POST',
-      body: new URLSearchParams({ task_id: taskId })
+    await fetch(`/api/DeleteTask/${taskId}`, {
+      method: 'DELETE',
     });
     loadTasks();
   }
 });
+
 
 
 document.addEventListener('DOMContentLoaded', () => {

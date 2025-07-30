@@ -86,65 +86,16 @@ class ApiController
             ], JSON_PRETTY_PRINT);
     }
 
-    public function completeTask(): void
+    public function completeTask($id): void
     {
         header('Content-Type: application/json');
         $this->startSession();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $id = (int)$id;
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'PATCH') {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
-            return;
-        }
-
-        $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
-        if (!$taskId) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid or missing task ID']);
-            return;
-        }
-
-        $tasks = $_SESSION['tasks'] ?? Task::getAll();
-        $found=false;
-
-        foreach ($tasks as &$task) {
-            if ($task['id'] === $taskId){
-                if($task['completed']){
-                    http_response_code(409);
-                    echo json_encode(['message' => 'Task is already completed.']);
-                    return;
-                }
-                $task['completed'] = true;
-                $found=true;
-                break;
-            }
-        }
-        if ($found) {
-            $_SESSION['tasks'] = $tasks;
-            http_response_code(200);
-            echo json_encode(['message' => 'Task completed successfully', 'task' => $task], JSON_PRETTY_PRINT);
-        } else {
-            http_response_code(404);
-            echo json_encode(['error' => 'Task not found or already completed']);
-        }
-    }
-    
-
-    public function unCompleteTask(): void
-    {
-        header('Content-Type: application/json');
-        $this->startSession();
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method Not Allowed']);
-            return;
-        }
-
-        $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
-        if (!$taskId) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid or missing task ID']);
             return;
         }
 
@@ -152,10 +103,50 @@ class ApiController
         $found = false;
 
         foreach ($tasks as &$task) {
-            if ($task['id'] === $taskId) {
+            if ($task['id'] === $id) {
+                if ($task['completed']) {
+                    http_response_code(409);
+                    echo json_encode(['message' => 'Task is already completed.']);
+                    return;
+                }
+                $task['completed'] = true;
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found) {
+            $_SESSION['tasks'] = $tasks;
+            http_response_code(200);
+            echo json_encode(['message' => 'Task completed successfully', 'task' => $task], JSON_PRETTY_PRINT);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Task not found']);
+        }
+    }
+    
+
+    public function unCompleteTask($id): void
+    {
+        header('Content-Type: application/json');
+        $this->startSession();
+
+        $id = (int)$id;
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'PATCH') {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method Not Allowed']);
+            return;
+        }
+
+        $tasks = $_SESSION['tasks'] ?? Task::getAll();
+        $found = false;
+
+        foreach ($tasks as &$task) {
+            if ($task['id'] === $id) {
                 if (!$task['completed']) {
-                    http_response_code(409); // Conflict
-                    echo json_encode(['error' => 'Task is not completed yet']);
+                    http_response_code(409);
+                    echo json_encode(['error' => 'Task is not completed']);
                     return;
                 }
                 $task['completed'] = false;
@@ -167,31 +158,23 @@ class ApiController
         if ($found) {
             $_SESSION['tasks'] = $tasks;
             http_response_code(200);
-            echo json_encode([
-                'message' => 'Task marked as uncompleted successfully',
-                'task' => $task
-            ], JSON_PRETTY_PRINT);
+            echo json_encode(['message' => 'Task marked as uncompleted successfully', 'task' => $task], JSON_PRETTY_PRINT);
         } else {
             http_response_code(404);
             echo json_encode(['error' => 'Task not found']);
         }
     }
 
-    public function deleteTask(): void
+    public function deleteTask($id): void
     {
         header('Content-Type: application/json');
         $this->startSession();
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $id = (int)$id;
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
             http_response_code(405);
             echo json_encode(['error' => 'Method Not Allowed']);
-            return;
-        }
-
-        $taskId = isset($_POST['task_id']) ? (int) $_POST['task_id'] : null;
-        if (!$taskId) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid or missing task ID']);
             return;
         }
 
@@ -199,9 +182,9 @@ class ApiController
         $found = false;
 
         foreach ($tasks as &$task) {
-            if ($task['id'] === $taskId) {
+            if ($task['id'] === $id) {
                 if ($task['deleted']) {
-                    http_response_code(409); // Conflict – już usunięte
+                    http_response_code(409);
                     echo json_encode(['error' => 'Task already deleted']);
                     return;
                 }
@@ -214,18 +197,10 @@ class ApiController
         if ($found) {
             $_SESSION['tasks'] = $tasks;
             http_response_code(200);
-            echo json_encode([
-                'message' => 'Task deleted successfully',
-                'task' => $task
-            ], JSON_PRETTY_PRINT);
+            echo json_encode(['message' => 'Task deleted successfully', 'task' => $task], JSON_PRETTY_PRINT);
         } else {
             http_response_code(404);
             echo json_encode(['error' => 'Task not found']);
         }
     }
 }
-
-
-
-
-
