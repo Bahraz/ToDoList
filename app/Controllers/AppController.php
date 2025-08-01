@@ -7,14 +7,14 @@ class AppController extends BaseController
 {
     private function fetchApi(string $url): ?array
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5); // limit czasu, opcjonalnie
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 5); // limit czasu, opcjonalnie
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        $response = curl_exec($curlHandle);
+        $httpCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+        curl_close($curlHandle);
 
         if ($httpCode === 200 && $response !== false) {
             return json_decode($response, true);
