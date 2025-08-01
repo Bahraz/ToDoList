@@ -11,7 +11,7 @@ class Task
     public static function getAll():array{
         $pdo = Database::getConnection();
         
-        $stmt = $pdo->query("SELECT * FROM tasks WHERE deleted = 0 ORDER BY date DESC");
+        $stmt = $pdo->query("SELECT * FROM tasks ORDER BY date DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }

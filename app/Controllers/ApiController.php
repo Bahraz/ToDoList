@@ -25,6 +25,7 @@ class ApiController
         switch ($status) {
             case 'all':
                 $tasks = array_filter($tasks, fn($task) => !$task['deleted']);
+                break;
             case 'active':
                 $tasks = array_filter($tasks, fn($task) => !$task['completed'] && !$task['deleted']);
                 break;
