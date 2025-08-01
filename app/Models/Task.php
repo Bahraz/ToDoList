@@ -2,60 +2,70 @@
 
 namespace Bahraz\ToDoApp\Models;
 
+use Bahraz\ToDoApp\Core\Database;
+use PDO;
+use PDOException;
+
 class Task
 {
-public static function getAll()
-{
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    public static function getAll():array{
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->query("SELECT * FROM tasks WHERE deleted = 0 ORDER BY date DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
-    if (!isset($_SESSION['tasks'])) {
-        $_SESSION['tasks'] = [
-            [
-                'id' => 1,
-                'title' => 'Buy groceries',
-                'completed' => false,
-                'priority' => 'low',
-                'date' => '2025-07-19',
-                'deleted' => false,
-            ],
-            [
-                'id' => 2,
-                'title' => 'Take the dog for a walk',
-                'completed' => false,
-                'priority' => 'high',
-                'date' => '2025-07-15',
-                'deleted' => false,
-            ],
-            [
-                'id' => 3,
-                'title' => 'Go to the gym',
-                'completed' => false,
-                'priority' => 'normal',
-                'date' => '2025-07-15',
-                'deleted' => false,
-            ],
-            [
-                'id' => 4,
-                'title' => 'Finish the project report',
-                'completed' => true,
-                'priority' => 'high',
-                'date' => '2025-07-10',
-                'deleted' => false,
-            ],
-            [
-                'id' => 5,
-                'title' => 'Read a book',
-                'completed' => true,
-                'priority' => 'low',
-                'date' => '2025-07-25',
-                'deleted' => false,
-            ],
-        ];
+    public static function getById(int $id): ?array
+    {
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE id = :id AND deleted = 0");
+        $stmt->execute([':id' => $id]);
+
+        $task=$stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $task ?: null;
     }
 
-    return $_SESSION['tasks'];
+    public static function addTask(array $data)
+    {
+        $pdo = Database::getConnection();
+
+        $sql = "INSERT INTO tasks (title, completed, priority, date, deleted) VALUES (:title, :completed, :priority, :date, :deleted)";
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':title' => $data['title'],
+            ':completed' => $data['completed'] ?? 0,
+            ':priority' => $data['priority'] ?? 'normal',
+            ':date' => date('Y-m-d'),
+            ':deleted' => 0
+        ]);
+    }
+
+    public static function updateTask(int $id, bool $completed): bool
+    {
+        $pdo = Database::getConnection();
+
+        $sql = "UPDATE tasks SET completed = :completed WHERE id = :id AND deleted = 0";
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $id,
+            ':completed' => $completed ? 1 : 0,
+        ]);
+    }
+
+    public static function deleteTask(int $id): bool
+    {
+        $pdo = Database::getConnection();
+
+        $sql = "UPDATE tasks SET deleted = 1 WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([':id' => $id]);
+    }
 }
 
-}
+
