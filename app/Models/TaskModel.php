@@ -6,16 +6,59 @@ use Bahraz\ToDoApp\Core\Database;
 use PDO;
 use PDOException;
 
-class Task
+class TaskModel
 {
-    public static function getAll():array{
+
+    public static function getTodayTasks(): array{
+        $pdo = Database::getConnection();
+        $today = date('Y-m-d');
+
+        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE date = :date AND deleted = 0");
+        $stmt->execute([':date' => $today]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getActiveTasks(): array
+    {
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->query("SELECT * FROM tasks WHERE completed=0 AND deleted=0 ORDER BY date DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getCompletedTasks(): array
+    {
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->query("SELECT * FROM tasks WHERE completed=1 AND deleted=0 ORDER BY date DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        public static function getAllNotDeletedTasks(): array
+    {
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->query("SELECT * FROM tasks WHERE deleted=0 ORDER BY date DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getDeletedTasks():array{
+        $pdo = Database::getConnection();
+        
+        $stmt = $pdo->query("SELECT * FROM tasks WHERE deleted=1 ORDER BY date DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAllTasks(): array
+    {
         $pdo = Database::getConnection();
         
         $stmt = $pdo->query("SELECT * FROM tasks ORDER BY date DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
+    //TODO: maybe delete this function? idk
     public static function getById(int $id): ?array
     {
         $pdo = Database::getConnection();
