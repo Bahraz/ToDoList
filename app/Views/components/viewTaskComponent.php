@@ -18,10 +18,8 @@ async function loadTasks() {
     const response = await fetch(`/api/tasks?status=${encodeURIComponent(taskStatus)}`);
     if (!response.ok) throw new Error('Error loading tasks');
 
-    const data = await response.json();
-    const tasks = Array.isArray(data) ? data : [];
-
-    if (!tasks.length) {
+    const tasks = await response.json();
+    if (!Array.isArray(tasks) || tasks.length === 0) {
       listEl.innerHTML = '<li class="list-group-item text-center">No tasks to display</li>';
       return;
     }
@@ -29,41 +27,42 @@ async function loadTasks() {
     listEl.innerHTML = '';
 
     tasks.forEach(task => {
-      const deleted = task.deleted === true;
-      const completed = task.completed === true;
-      const priority = task.priority || 'normal';
+      const { id, title, date, completed, deleted, priority } = task;
 
-      const priorityClass = priority === 'high' ? 'danger' :
-                            priority === 'low' ? 'secondary' :
-                            'primary';
+      const priorityClass = {
+        high: 'danger',
+        low: 'secondary',
+        normal: 'primary'
+      }[priority] || 'primary';
 
       let actionButtons = '';
-      if (!deleted) {
-        if (!completed) {
+
+      if (taskStatus === 'deleted') {
+        actionButtons = `<span class="text-muted fst-italic">Deleted</span>`;
+      } else {
+        if (taskStatus === 'completed' || (taskStatus === 'all' && completed)) {
           actionButtons += `
-            <button class="btn btn-sm btn-success me-2 complete-task" data-id="${task.id}" title="End task">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16" style="margin-bottom: 3px;">
-                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-              </svg>
-            </button>`;
-        } else {
-          actionButtons += `
-            <button class="btn btn-sm btn-warning me-2 uncomplete-task" data-id="${task.id}" title="Restore task">
+		        <button class="btn btn-sm btn-warning me-2 uncomplete-task" data-id="${task.id}" title="Restore task">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16" style="margin-bottom: 3px;">
                 <path d="M3.5 8a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </button>`;
+        } else if (!completed) {
+          actionButtons += `
+			      <button class="btn btn-sm btn-success me-2 complete-task" data-id="${task.id}" title="End task">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16" style="margin-bottom: 3px;">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
               </svg>
             </button>`;
         }
 
         actionButtons += `
-          <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}" title="Delete task">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" style="margin-bottom: 3px;">
-              <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zM3.042 3.5l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92L12.958 3.5H3.042z"/>
-              <path d="M5.071 5.03a.5.5 0 0 1 .47-.53.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 1 1-.998.06l-.5-8.5zM10.129 5.03a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47zM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-            </svg>
-          </button>`;
-      } else {
-        actionButtons = `<span class="text-muted fst-italic">Deleted</span>`;
+        <button class="btn btn-sm btn-danger delete-task" data-id="${task.id}" title="Delete task">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16" style="margin-bottom: 3px;">
+            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zM3.042 3.5l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92L12.958 3.5H3.042z"/>
+            <path d="M5.071 5.03a.5.5 0 0 1 .47-.53.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 1 1-.998.06l-.5-8.5zM10.129 5.03a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47zM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+          </svg>
+        </button>`;
       }
 
       const li = document.createElement('li');
@@ -73,8 +72,8 @@ async function loadTasks() {
           <div class="d-flex align-items-center">
             <span class="badge bg-${priorityClass} me-2 text-uppercase">${priority}</span>
             <div class="text-start">
-              <div>${task.title ?? ''}</div>
-              <small class="text-muted">${task.date ?? ''}</small>
+              <div>${title}</div>
+              <small class="text-muted">${date}</small>
             </div>
           </div>
           <div class="d-flex align-items-center">${actionButtons}</div>
@@ -85,8 +84,8 @@ async function loadTasks() {
     });
 
   } catch (err) {
-    listEl.innerHTML = `<li class="list-group-item text-danger text-center">Error loading tasks</li>`;
     console.error(err);
+    listEl.innerHTML = `<li class="list-group-item text-danger text-center">Error loading tasks</li>`;
   }
 }
 
@@ -97,31 +96,20 @@ document.addEventListener('click', async function (e) {
   const taskId = btn.dataset.id;
 
   if (btn.classList.contains('complete-task')) {
-    await fetch(`/api/CompleteTask/${taskId}`, {
-      method: 'PATCH',
-    });
+    await fetch(`/api/updatetask/complete/${taskId}`, { method: 'PATCH' });
     loadTasks();
   }
 
   if (btn.classList.contains('uncomplete-task')) {
-    await fetch(`/api/UncompleteTask/${taskId}`, {
-      method: 'PATCH',
-    });
+    await fetch(`/api/updatetask/uncomplete/${taskId}`, { method: 'PATCH' });
     loadTasks();
   }
 
   if (btn.classList.contains('delete-task')) {
-    await fetch(`/api/DeleteTask/${taskId}`, {
-      method: 'DELETE',
-    });
+    await fetch(`/api/updatetask/delete/${taskId}`, { method: 'PATCH' });
     loadTasks();
   }
 });
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadTasks();
-});
-
+document.addEventListener('DOMContentLoaded', loadTasks);
 </script>
