@@ -1,7 +1,6 @@
 <?php
 namespace Bahraz\ToDoApp\Controllers;
 
-use Bahraz\ToDoApp\Models\Task;
 use Bahraz\ToDoApp\Models\TaskModel;
 
 class ApiController

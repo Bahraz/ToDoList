@@ -8,5 +8,7 @@ $router->get('/contact', 'AppController@contact');
 
 // Component routes
 $router->get('/tasks/form/add', 'AppController@addTaskForm');
+$router->get('/login', 'AppController@loginForm');
+$router->get('/register', 'AppController@registerForm');
 $router->get('/tasks/view/{status}', 'AppController@viewTask');
 
