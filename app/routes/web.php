@@ -1,12 +1,14 @@
 <?php
 
 // web routes 
-$router->get('/', 'AppController@index');
-$router->get('/home/index', 'AppController@index');
-$router->get('/about', 'AppController@about');
-$router->get('/contact', 'AppController@contact');
+$router->get('/', 'Web\AppController@index');
+$router->get('/home/index', 'Web\AppController@index');
+$router->get('/about', 'Web\AppController@about');
+$router->get('/contact', 'Web\AppController@contact');
 
 // Component routes
-$router->get('/tasks/form/add', 'AppController@addTaskForm');
-$router->get('/tasks/view/{status}', 'AppController@viewTask');
+$router->get('/tasks/form/add', 'Web\AppController@addTaskForm');
+$router->get('/login', 'Web\AppController@loginForm');
+$router->get('/register', 'Web\AppController@registerForm');
+$router->get('/tasks/view/{status}', 'Web\AppController@viewTask');
 
