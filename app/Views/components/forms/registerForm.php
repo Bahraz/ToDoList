@@ -37,3 +37,5 @@
     </div>
   </div>
 </form>
+
+<script src="/assets/js/auth/register-auth-form.js"></script>

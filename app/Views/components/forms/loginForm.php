@@ -29,3 +29,5 @@
     </div>
   </div>
 </form>
+
+<script src="/assets/js/auth/login-auth-login.js"></script>
