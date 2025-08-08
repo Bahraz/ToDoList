@@ -8,14 +8,16 @@
 document.addEventListener("DOMContentLoaded", function () {
   const dateInput = document.getElementById("task-date");
 
-  // Inicjalizacja flatpickr
+  // flatpickr initialization
   const picker = flatpickr(dateInput, {
     dateFormat: "Y-m-d",
     locale: "pl"
   });
 
-  // Obsługa kliknięcia w przycisk
+  // Button to open the flatpickr calendar
   document.getElementById("open-flatpickr").addEventListener("click", function () {
     picker.open(); // <- otwiera kalendarz
   });
 });
+
+

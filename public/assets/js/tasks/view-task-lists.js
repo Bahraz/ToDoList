@@ -1,14 +1,4 @@
-<h2 class="text-center mb-4">Your tasks</h2>
-<div class="row justify-content-center">
-  <div class="col-md-6">
-    <ul class="list-group" id="task-list">
-      <li class="list-group-item text-center">Loading tasks...</li>
-    </ul>
-  </div>
-</div>
-
-<script>
-const taskStatus = <?= json_encode($status ?? 'all') ?>;
+const taskStatus = window.taskStatus || 'all';
 
 async function loadTasks() {
   const listEl = document.getElementById('task-list');
@@ -112,4 +102,3 @@ document.addEventListener('click', async function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', loadTasks);
-</script>
