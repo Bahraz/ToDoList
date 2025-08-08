@@ -1,9 +1,10 @@
 <?php
-namespace Bahraz\ToDoApp\Controllers;
+namespace Bahraz\ToDoApp\Controllers\Web;
 
 use Bahraz\ToDoApp\Models\TaskModel;
+use Bahraz\ToDoApp\Controllers\BaseController;
 
-class ApiController
+class ApiController extends BaseController
 {
     
     //TODO: At this moment, sesion is not used in the project, but it might be useful in the future.
@@ -13,13 +14,6 @@ class ApiController
     //         session_start();
     //     }
     // }
-
-    private function respond($data, int $statusCode = 200): void
-    {
-        header('Content-Type: application/json');
-        http_response_code($statusCode);
-        echo json_encode($data, JSON_PRETTY_PRINT);
-    }
 
     public function index(): void
     {
