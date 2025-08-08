@@ -1,5 +1,7 @@
 <?php
-namespace Bahraz\ToDoApp\Controllers;
+namespace Bahraz\ToDoApp\Controllers\Web;
+
+use Bahraz\ToDoApp\Controllers\BaseController;
 
 
 class AppController extends BaseController
