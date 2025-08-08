@@ -24,12 +24,21 @@ class AppController extends BaseController
 
     public function addTaskForm(): void
     {
-        $this->render('components/addTaskComponent');
+        $this->render('Components/Forms/addTaskForm');
     }
 
     public function viewTask(string $status = 'all'): void
     {
-        $this->render('components/viewTaskComponent', ['status' => $status]);
+        $this->render('Components/lists/viewTask', ['status' => $status]);
+    }
+
+    public function loginForm(): void
+    {
+        $this->render('Components/Forms/loginForm');
+    }
+    public function registerForm(): void
+    {
+        $this->render('Components/Forms/registerForm');
     }
 }
 

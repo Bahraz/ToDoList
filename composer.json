@@ -1,6 +1,6 @@
 {
     "name": "bahraz/to-do-app",
-    "description": "Browser strategy game in PHP (MVC)",
+    "description": "Browser To Do App in PHP (MVC)",
     "type": "project",
     "autoload": {
         "psr-4": {

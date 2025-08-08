@@ -1,7 +1,6 @@
 <?php
 namespace Bahraz\ToDoApp\Controllers\Web;
 
-use Bahraz\ToDoApp\Models\Task;
 use Bahraz\ToDoApp\Models\TaskModel;
 use Bahraz\ToDoApp\Controllers\BaseController;
 
