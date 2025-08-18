@@ -128,35 +128,47 @@ class TaskModel
      * Example usage: updateTaskById(5, ['completed' => 1, 'priority' => 'high']);
      */
     public static function updateTaskById(int $id, array $fields): bool
-    {
-        try {
-            $pdo = Database::getConnection();
+{
+    try {
+        $pdo = Database::getConnection();
 
-            $allowedFields = ['title', 'completed', 'priority', 'date', 'deleted'];
-            $setParts = [];
-            $params = [':id' => $id];
+        $allowedFields = ['title', 'completed', 'priority', 'date', 'deleted'];
+        $setParts = [];
+        $params = [':id' => $id];
 
-            foreach ($fields as $key => $value) {
-                if (in_array($key, $allowedFields, true)) {
-                    $paramKey = ':' . $key;
-                    $setParts[] = "$key = $paramKey";
-                    $params[$paramKey] = $value;
+        foreach ($fields as $key => $value) {
+            if (in_array($key, $allowedFields, true)) {
+                $paramKey = ':' . $key;
+
+                // Zamień boolean na int w polach logicznych
+                if (in_array($key, ['completed', 'deleted'], true)) {
+                    $value = (int) $value;
                 }
+
+                $setParts[] = "$key = $paramKey";
+                $params[$paramKey] = $value;
             }
-
-            if (empty($setParts)) {
-                return false; // Nothing to update
-            }
-
-            $sql = "UPDATE tasks SET " . implode(', ', $setParts) . " WHERE id = :id";
-            $stmt = $pdo->prepare($sql);
-
-            return $stmt->execute($params);
-
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database query failed: ' . $e->getMessage());
         }
+
+        if (empty($setParts)) {
+            return false; // Nic do aktualizacji
+        }
+
+        $sql = "UPDATE tasks SET " . implode(', ', $setParts) . " WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+
+        if (!$stmt->execute($params)) {
+            error_log(print_r($stmt->errorInfo(), true)); // log SQL błędów
+            return false;
+        }
+
+        return true;
+
+    } catch (PDOException $e) {
+        throw new RuntimeException('Database query failed: ' . $e->getMessage());
     }
+}
+
 
     public static function deleteTask(int $id): bool
     {

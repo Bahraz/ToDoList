@@ -29,7 +29,7 @@ class AppController extends BaseController
 
     public function viewTask(string $status = 'all'): void
     {
-        $this->render('Components/lists/viewTask', ['status' => $status]);
+        $this->render('Components/Lists/viewTask', ['status' => $status]);
     }
 
     public function loginForm(): void

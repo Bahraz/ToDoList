@@ -21,7 +21,7 @@
       const formData = new FormData(form);
 
       try {
-        const response = await fetch('/api/Register', {
+        const response = await fetch('/api/register', {
           method: 'POST',
           body: formData
         });
