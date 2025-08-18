@@ -74,27 +74,21 @@ class TaskController {
 
 public function updateTask(int $id): void
 {
-    header('Content-Type: application/json');
-
-    if ($_SERVER['REQUEST_METHOD'] !== 'PATCH') {
-        http_response_code(405);
-        echo json_encode(['error' => 'Method Not Allowed']);
-        return;
-    }
-
     $input = json_decode(file_get_contents('php://input'), true);
 
-    if (!$input) {
+    if (!is_array($input)) {
         http_response_code(400);
-        echo json_encode(['error' => 'Invalid input']);
+        echo json_encode(['error' => 'Invalid JSON']);
         return;
     }
 
-    // Aktualizacja pól: completed, priority, date, title, deleted
     $fieldsToUpdate = [];
 
+    if (array_key_exists('title', $input)) {
+        $fieldsToUpdate['title'] = $input['title'];
+    }
     if (array_key_exists('completed', $input)) {
-        $fieldsToUpdate['completed'] = (bool)$input['completed'];
+        $fieldsToUpdate['completed'] = $input['completed'] ? 1 : 0;
     }
     if (array_key_exists('priority', $input)) {
         $fieldsToUpdate['priority'] = $input['priority'];
@@ -102,22 +96,17 @@ public function updateTask(int $id): void
     if (array_key_exists('date', $input)) {
         $fieldsToUpdate['date'] = $input['date'];
     }
-    if (array_key_exists('title', $input)) {
-        $fieldsToUpdate['title'] = $input['title'];
-    }
     if (array_key_exists('deleted', $input)) {
-        $fieldsToUpdate['deleted'] = (bool)$input['deleted'];
+        $fieldsToUpdate['deleted'] = $input['deleted'] ? 1 : 0;
     }
 
     if (empty($fieldsToUpdate)) {
         http_response_code(400);
-        echo json_encode(['error' => 'No fields to update']);
+        echo json_encode(['error' => 'No valid fields provided']);
         return;
     }
 
-    $success = TaskModel::updateTaskById($id, $fieldsToUpdate);
-
-    if ($success) {
+    if (TaskModel::updateTaskById($id, $fieldsToUpdate)) {
         http_response_code(200);
         echo json_encode(['message' => 'Task updated']);
     } else {
@@ -125,5 +114,4 @@ public function updateTask(int $id): void
         echo json_encode(['error' => 'Failed to update task']);
     }
 }
-
 }
