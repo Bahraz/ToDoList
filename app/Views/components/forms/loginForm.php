@@ -30,4 +30,4 @@
   </div>
 </form>
 
-<script src="/assets/js/auth/login-auth-login.js"></script>
+<script src="/assets/js/auth/login-auth-form.js"></script>
