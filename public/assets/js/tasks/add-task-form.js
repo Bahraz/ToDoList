@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Button to open the flatpickr calendar
   document.getElementById("open-flatpickr").addEventListener("click", function () {
-    picker.open(); // <- otwiera kalendarz
+    picker.open(); 
   });
 
   const form = document.getElementById('add-task-form');

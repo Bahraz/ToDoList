@@ -1,3 +1,4 @@
+
 <h2 class="text-center mb-4">Your tasks</h2>
 <div class="row justify-content-center">
   <div class="col-md-6">
@@ -13,3 +14,7 @@
 </script>
 <script src="/assets/js/tasks/view-task-lists.js"></script>
 
+<?php
+echo $_SESSION['user_id'] ?? 'No user logged in';
+echo '  |  ';
+echo $_SESSION['user_email'] ?? 'No user email set';

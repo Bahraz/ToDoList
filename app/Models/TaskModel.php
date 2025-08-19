@@ -140,7 +140,6 @@ class TaskModel
             if (in_array($key, $allowedFields, true)) {
                 $paramKey = ':' . $key;
 
-                // Zamień boolean na int w polach logicznych
                 if (in_array($key, ['completed', 'deleted'], true)) {
                     $value = (int) $value;
                 }
@@ -151,14 +150,14 @@ class TaskModel
         }
 
         if (empty($setParts)) {
-            return false; // Nic do aktualizacji
+            return false;
         }
 
         $sql = "UPDATE tasks SET " . implode(', ', $setParts) . " WHERE id = :id";
         $stmt = $pdo->prepare($sql);
 
         if (!$stmt->execute($params)) {
-            error_log(print_r($stmt->errorInfo(), true)); // log SQL błędów
+            error_log(print_r($stmt->errorInfo(), true));
             return false;
         }
 
