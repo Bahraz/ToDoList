@@ -8,13 +8,18 @@ use PDOException;
 use RuntimeException;
 
 class TaskModel
-{
+{   
+    protected static function getUserID(): int
+    {   
+        session_start();
+        return $_SESSION['user_id'] ?? 0;
+    }
     public static function getTodayTasks(): array
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE date = :date AND deleted = 0");
-            $stmt->execute([':date' => date('Y-m-d')]);
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE date = :date AND deleted = 0 AND user_id = :user_id");
+            $stmt->execute([':date' => date('Y-m-d'), ':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -26,8 +31,8 @@ class TaskModel
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE completed = 0 AND deleted = 0 ORDER BY date DESC");
-            $stmt->execute();
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE completed = 0 AND deleted = 0 AND user_id = :user_id ORDER BY date DESC");
+            $stmt->execute([':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -39,8 +44,8 @@ class TaskModel
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE completed = 1 AND deleted = 0 ORDER BY date DESC");
-            $stmt->execute();
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE completed = 1 AND deleted = 0 AND user_id = :user_id ORDER BY date DESC");
+            $stmt->execute([':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -52,8 +57,8 @@ class TaskModel
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE deleted = 0 ORDER BY date DESC");
-            $stmt->execute();
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE deleted = 0 AND user_id = :user_id ORDER BY date DESC");
+            $stmt->execute([':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -65,8 +70,8 @@ class TaskModel
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE deleted = 1 ORDER BY date DESC");
-            $stmt->execute();
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE deleted = 1 AND user_id = :user_id ORDER BY date DESC");
+            $stmt->execute([':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -78,8 +83,8 @@ class TaskModel
     {
         try {
             $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM tasks ORDER BY date DESC");
-            $stmt->execute();
+            $stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = :user_id ORDER BY date DESC");
+            $stmt->execute([':user_id' => self::getUserID()]);
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -107,11 +112,12 @@ class TaskModel
         try {
             $pdo = Database::getConnection();
 
-            $sql = "INSERT INTO tasks (title, completed, priority, date, deleted) 
-                    VALUES (:title, :completed, :priority, :date, :deleted)";
+            $sql = "INSERT INTO tasks (user_id,title, completed, priority, date, deleted) 
+                    VALUES (:user_id, :title, :completed, :priority, :date, :deleted)";
             $stmt = $pdo->prepare($sql);
 
             return $stmt->execute([
+                ':user_id' => self::getUserID(),
                 ':title' => $data['title'],
                 ':completed' => $data['completed'] ?? 0,
                 ':priority' => $data['priority'] ?? 'normal',

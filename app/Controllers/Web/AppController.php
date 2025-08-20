@@ -9,21 +9,25 @@ class AppController extends BaseController
     
     public function index(): void
     {
+        $this->startSession();
         $this->render('home/index');
     }
     
     public function about(): void
     {
+        $this->startSession();
         $this->render('layouts/about');
     }
 
     public function contact(): void
     {
+        $this->startSession();
         $this->render('layouts/contact');
     }
 
     public function addTaskForm(): void
     {
+        $this->startSession();
         $this->render('Components/Forms/addTaskForm');
     }
 
