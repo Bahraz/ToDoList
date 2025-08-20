@@ -7,8 +7,6 @@ use Bahraz\ToDoApp\Core\Router;
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// session_start();
-
 $router = new Router();
 
 require __DIR__ . '/../app/routes/web.php';

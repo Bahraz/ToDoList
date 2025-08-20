@@ -58,7 +58,13 @@ class UserController {
     }
 
     public function logoutUser() {
-        session_start();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION = [];
+        
         session_destroy();
 
         header('Content-Type: application/json');
