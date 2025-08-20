@@ -16,4 +16,11 @@ class BaseController
         http_response_code($statusCode);
         echo json_encode($data, JSON_PRETTY_PRINT);
     }
+
+    protected function startSession(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
 }

@@ -51,6 +51,13 @@ class UserController {
         $userId = UserModel::createUser($email, $hashedPassword);
 
         if ($userId) {
+            session_start();
+
+            $user = UserModel::findUserByEmail($email);
+
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+
             echo json_encode(['success' => true, 'message' => 'Registration successful']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Registration failed']);
@@ -58,7 +65,13 @@ class UserController {
     }
 
     public function logoutUser() {
-        session_start();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION = [];
+        
         session_destroy();
 
         header('Content-Type: application/json');

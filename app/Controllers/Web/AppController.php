@@ -29,6 +29,7 @@ class AppController extends BaseController
 
     public function viewTask(string $status = 'all'): void
     {
+        $this->startSession();
         $this->render('Components/Lists/viewTask', ['status' => $status]);
     }
 
