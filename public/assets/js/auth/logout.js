@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
 
       if (data.success) {
-        window.location.href = '/home'; 
+        window.location.href = '/'; 
       } else {
         alert('Logout failed');
       }
