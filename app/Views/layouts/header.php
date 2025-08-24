@@ -30,6 +30,7 @@
         <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
         </li>
+        <?php if(isset($_SESSION['user_id'])): ?>
         <li class="nav-item">
             <div class="btn-group">
                 <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,12 +46,14 @@
                 </ul>
             </div>
         </li>
+        <?php endif; ?>
         <li class="nav-item">
             <a class="nav-link" href="/about">About us</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/contact">Contact</a>
         </li>
+        <?php if(!isset($_SESSION['user_id'])): ?>
         <li>
             <a href='/login' class="btn btn-info">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -59,6 +62,7 @@
                     Login
             </a>
         </li>
+        <?php endif; ?>
         <?php
             if(isset($_SESSION['user_id'])): ?>
                 <button class="btn btn-danger" id="logout-btn">
