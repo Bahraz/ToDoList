@@ -2,7 +2,6 @@
 namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Models\TaskModel;
-// use Bahraz\ToDoApp\Controllers\BaseController
 use Bahraz\ToDoApp\Controllers\Api\TaskController;
 
 class ApiController extends TaskController
