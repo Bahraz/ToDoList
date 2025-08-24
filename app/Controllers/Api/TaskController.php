@@ -1,40 +1,47 @@
 <?php
+
 namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Models\TaskModel;
+class TaskController
+{
+    private TaskModel $taskModel;
 
-class TaskController {
-
-    public function index(): void
+    public function __construct()
     {
-        header('Content-Type: application/json');
-
-        $status = $_GET['status'] ?? 'all';
-
-        switch ($status) {
-            case 'all':
-                $tasks = TaskModel::getAllNotDeletedTasks();
-                break;
-            case 'active':
-                $tasks = TaskModel::getActiveTasks();
-                break;
-            case 'today':
-                $tasks = TaskModel::getTodayTasks();
-                break;
-            case 'completed':
-                $tasks = TaskModel::getCompletedTasks();
-                break;
-            case 'deleted':
-                $tasks = TaskModel::getDeletedTasks();
-                break;
-            default:
-                http_response_code(400);
-                echo json_encode(['error' => 'Invalid status']);
-                return;
-        }
-
-        echo json_encode(array_values($tasks));
+        $this->taskModel = new TaskModel();
     }
+
+    // public function index(): void
+    // {
+    //     header('Content-Type: application/json');
+
+    //     $status = $_GET['status'] ?? 'all';
+
+    //     switch ($status) {
+    //         case 'all':
+    //             $tasks = $this->taskModel->getAllNotDeletedTasks();
+    //             break;
+    //         case 'active':
+    //             $tasks = $this->taskModel->getActiveTasks();
+    //             break;
+    //         case 'today':
+    //             $tasks = $this->taskModel->getTodayTasks();
+    //             break;
+    //         case 'completed':
+    //             $tasks = $this->taskModel->getCompletedTasks();
+    //             break;
+    //         case 'deleted':
+    //             $tasks = $this->taskModel->getDeletedTasks();
+    //             break;
+    //         default:
+    //             http_response_code(400);
+    //             echo json_encode(['error' => 'Invalid status']);
+    //             return;
+    //     }
+
+    //     echo json_encode(array_values($tasks));
+    // }
 
     public function addTask(): void
     {
@@ -56,7 +63,7 @@ class TaskController {
             return;
         }
 
-        $success = TaskModel::addTask([
+        $success = $this->taskModel->addTask([
             'title' => $title,
             'priority' => $priority,
             'date' => $date,
@@ -72,46 +79,38 @@ class TaskController {
         }
     }
 
-public function updateTask(int $id): void
-{
-    $input = json_decode(file_get_contents('php://input'), true);
+    public function updateTask(int $id): void
+    {
+        $input = json_decode(file_get_contents('php://input'), true);
 
-    if (!is_array($input)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Invalid JSON']);
-        return;
-    }
+        if (!is_array($input)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid JSON']);
+            return;
+        }
 
-    $fieldsToUpdate = [];
+        $fieldsToUpdate = [];
 
-    if (array_key_exists('title', $input)) {
-        $fieldsToUpdate['title'] = $input['title'];
-    }
-    if (array_key_exists('completed', $input)) {
-        $fieldsToUpdate['completed'] = $input['completed'] ? 1 : 0;
-    }
-    if (array_key_exists('priority', $input)) {
-        $fieldsToUpdate['priority'] = $input['priority'];
-    }
-    if (array_key_exists('date', $input)) {
-        $fieldsToUpdate['date'] = $input['date'];
-    }
-    if (array_key_exists('deleted', $input)) {
-        $fieldsToUpdate['deleted'] = $input['deleted'] ? 1 : 0;
-    }
+        foreach (['title', 'completed', 'priority', 'date', 'deleted'] as $field) {
+            if (isset($input[$field])) {
+                $fieldsToUpdate[$field] = ($field === 'completed' || $field === 'deleted')
+                    ? (int)$input[$field]
+                    : $input[$field];
+            }
+        }
 
-    if (empty($fieldsToUpdate)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'No valid fields provided']);
-        return;
-    }
+        if (empty($fieldsToUpdate)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'No valid fields provided']);
+            return;
+        }
 
-    if (TaskModel::updateTaskById($id, $fieldsToUpdate)) {
-        http_response_code(200);
-        echo json_encode(['message' => 'Task updated']);
-    } else {
-        http_response_code(500);
-        echo json_encode(['error' => 'Failed to update task']);
+        if ($this->taskModel->updateTaskById($id, $fieldsToUpdate)) {
+            http_response_code(200);
+            echo json_encode(['message' => 'Task updated']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to update task']);
+        }
     }
-}
 }

@@ -23,4 +23,16 @@ class BaseController
             session_start();
         }
     }
+
+    protected function redirectIfAuthenticated(array $paths = ['/login', '/register']): void
+    {
+        $this->startSession();
+
+        $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        if(isset($_SESSION['user_id']) && in_array($currentPath, $paths, true)) {
+            header('Location: /tasks/view/active');
+            exit();
+        }
+    }
 }

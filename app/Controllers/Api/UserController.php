@@ -3,8 +3,15 @@
 namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Models\UserModel;
+class UserController
+{
+    private UserModel $userModel;
 
-class UserController {
+    public function __construct()
+    {
+        $this->userModel = new UserModel();
+    }
+
     public function loginUser() {
         header('Content-Type: application/json');
 
@@ -12,11 +19,10 @@ class UserController {
 
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
-        
 
-        $user = UserModel::findUserByEmail($email);
+        $user = $this->userModel->findUserByEmail($email);
 
-        if ($user && UserModel::verifyUserPassword($password, $user['password'])) {
+        if ($user && $this->userModel->verifyUserPassword($password, $user['password'])) {
             session_start();
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
@@ -27,6 +33,7 @@ class UserController {
         }
     }
 
+
     public function registerUser() {
         header('Content-Type: application/json');
 
@@ -36,7 +43,7 @@ class UserController {
         $password = $input['password'] ?? '';
         $confirmPassword = $input['confirmPassword'] ?? '';
 
-        if (UserModel::findUserByEmail($email)) {
+        if ($this->userModel->findUserByEmail($email)) {
             echo json_encode(['success' => false, 'message' => 'Email already in use']);
             return;
         }
@@ -46,14 +53,14 @@ class UserController {
             return;
         }
 
-        $hashedPassword = UserModel::hashPassword($password);
-        
-        $userId = UserModel::createUser($email, $hashedPassword);
+        $hashedPassword = $this->userModel->hashPassword($password);
+
+        $userId = $this->userModel->createUser($email, $hashedPassword);
 
         if ($userId) {
             session_start();
 
-            $user = UserModel::findUserByEmail($email);
+            $user = $this->userModel->findUserByEmail($email);
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
@@ -64,7 +71,7 @@ class UserController {
         }
     }
 
-    public function logoutUser() {
+        public function logoutUser() {
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();

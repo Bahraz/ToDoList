@@ -2,7 +2,7 @@
 
 
 // Define API routes
-$router->get('/api/tasks', 'Api\TaskController@index');       
+$router->get('/api/tasks', 'Api\ApiController@index');       
 $router->post('/api/add-task', 'Api\TaskController@addTask');  
 $router->patch('/api/tasks/{id}', 'Api\TaskController@updateTask'); 
 

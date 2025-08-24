@@ -6,41 +6,50 @@ use PDO;
 use PDOException;
 use RuntimeException;
 
-class Database
-{
-    private static ?PDO $instance = null;
+class Database {
+    
+    private PDO $connection;
 
-    public static function getConnection(): PDO
-    {
-        if (self::$instance === null){
-
-            $required = ['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS'];
-
-            foreach ($required as $key) {
-                if (!isset($_ENV[$key])) {
-                    throw new RuntimeException("Missing {$key} in environment variables.");
-                }
-
-            }
-            
-            $host = $_ENV['DB_HOST'];
-            $db   = $_ENV['DB_NAME'];
-            $user = $_ENV['DB_USER'];
-            $pass = $_ENV['DB_PASS'];
-
-            $charset = 'utf8mb4';
-
-            $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
+    public function __construct() {
             try{
-                self::$instance = new PDO($dsn, $user, $pass,[
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                ]);
+                $this->connection = new PDO(
+                    "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']};charset={$_ENV['DB_CHARSET']}",
+                    $_ENV['DB_USER'],
+                    $_ENV['DB_PASS']
+                );
+                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 throw new RuntimeException('Database connection failed: ' . $e->getMessage());
             }
-        }
-        return self::$instance;
+    }
+
+    public function getConnection(): PDO {
+        return $this->connection;
+    }
+
+    public function query(string $sql, array $params = []): bool
+    {
+        $stmt = $this->connection->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function fetch(string $sql, array $params = []): ?array 
+    {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
+    public function fetchAll(string $sql, array $params = []): array 
+    {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function lastInsertId(): string 
+    {
+        return $this->connection->lastInsertId();
     }
 }

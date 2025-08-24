@@ -3,44 +3,36 @@
 namespace Bahraz\ToDoApp\Models;
 
 use Bahraz\ToDoApp\Core\Database;
-use PDO;
-use PDOException;
-use RuntimeException;
+class UserModel {
+    private Database $db;
 
-class UserModel{
-
-    public static function findUserByEmail(string $email): ?array
+    public function __construct()
     {
-        try {
-            $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->execute([':email' => $email]);
-
-            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database query failed: ' . $e->getMessage());
-        }
+        $this->db = new Database();
     }
 
-    public static function verifyUserPassword(string $password, string $hashedPassword): bool
+    public function findUserByEmail(string $email): ?array
+    {
+        return $this->db->fetch(
+            "SELECT * FROM users WHERE email = :email",
+            [':email' => $email]);
+    }
+
+    public function verifyUserPassword(string $password, string $hashedPassword): bool
     {
         return password_verify($password, $hashedPassword);
     }
 
-    public static function hashPassword(string $password): string
+    public function hashPassword(string $password): string
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
-    public static function createUser(string $email, string $password):bool
+    public function createUser(string $email, string $password): bool
     {
-        try {
-            $pdo = Database::getConnection();
-            $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
-            return $stmt->execute([':email' => $email, ':password' => $password]);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database query failed: ' . $e->getMessage());
-        }
+        $hashedPassword = $this->hashPassword($password);
+        return $this->db->query(
+            "INSERT INTO users (email, password) VALUES (:email, :password)", 
+            [':email' => $email, ':password' => $hashedPassword]);
     }
-
 }

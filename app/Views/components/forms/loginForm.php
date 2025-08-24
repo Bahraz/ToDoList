@@ -1,4 +1,9 @@
-<form class="row justify-content-center needs-validation" id="login-form" novalidate>
+<?php 
+if(isset($_SESSION['user_id'])) {
+    header('Location: /tasks/view/active');
+    exit;
+}
+?><form class="row justify-content-center needs-validation" id="login-form" novalidate>
   <div class="col-md-6 col-sm-10 p-4 border rounded shadow-sm">
     <h3 class="text-center mb-4">Login</h3>
 

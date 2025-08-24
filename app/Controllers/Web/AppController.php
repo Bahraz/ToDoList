@@ -38,11 +38,13 @@ class AppController extends BaseController
     }
 
     public function loginForm(): void
-    {
+    {   
+        $this->redirectIfAuthenticated();
         $this->render('Components/Forms/loginForm');
     }
     public function registerForm(): void
     {
+        $this->redirectIfAuthenticated();
         $this->render('Components/Forms/registerForm');
     }
 }

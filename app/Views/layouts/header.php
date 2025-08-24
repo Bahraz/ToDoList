@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg"/>
-    <meta name="description" content="ToDoList - prosta aplikacja do zarządzania zadaniami" />
-    <meta name="keywords" content="ToDoList, zarządzanie zadaniami, aplikacja webowa" />
+    <meta name="description" content="ToDoList - Manage your tasks efficiently and stay organized." />
+    <meta name="keywords" content="ToDoList, Manage tasks, web application" />
     <meta name="author" content="Bahraz" />
 
     <title><?= htmlspecialchars($title ?? 'ToDoList') ?></title>
@@ -84,4 +84,10 @@
     <?php unset($_SESSION['flash_message']); ?>
 <?php endif; ?>
 <div class="container text-center py-5">
+    <?php if(!isset($_SESSION['user_id'])): ?>
     <h1 class="mb-4">Welcome to To-Do App</h1>
+    <?php endif; if(isset($_SESSION['user_id'])): ?>
+    <h1 class="mb-4">Welcome back, <?= htmlspecialchars($_SESSION['user_email']); ?></h1>
+    <?php endif; ?>
+
+
