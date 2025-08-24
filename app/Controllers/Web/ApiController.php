@@ -6,20 +6,9 @@ use Bahraz\ToDoApp\Controllers\BaseController;
 
 class ApiController extends BaseController
 {
-    
-    //TODO: At this moment, sesion is not used in the project, but it might be useful in the future.
-    // private function startSession(): void
-    // {
-    //     if (session_status() === PHP_SESSION_NONE) {
-    //         session_start();
-    //     }
-    // }
-
     public function index(): void
     {
         header('Content-Type: application/json');
-
-        // $this->startSession();
 
         $status = $_GET['status'] ?? 'all';
 

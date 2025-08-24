@@ -30,6 +30,7 @@
         <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
         </li>
+        <?php if(isset($_SESSION['user_id'])): ?>
         <li class="nav-item">
             <div class="btn-group">
                 <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,12 +46,14 @@
                 </ul>
             </div>
         </li>
+        <?php endif; ?>
         <li class="nav-item">
             <a class="nav-link" href="/about">About us</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/contact">Contact</a>
         </li>
+        <?php if(!isset($_SESSION['user_id'])): ?>
         <li>
             <a href='/login' class="btn btn-info">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -59,6 +62,16 @@
                     Login
             </a>
         </li>
+        <?php endif; ?>
+        <?php
+            if(isset($_SESSION['user_id'])): ?>
+                <button class="btn btn-danger" id="logout-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill" viewBox="0 0 16 16">
+                            <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+                    </svg>
+                    Logout
+                </button>
+        <?php endif; ?>
     </ul>
 </div>
 </nav>

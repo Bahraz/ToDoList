@@ -2,6 +2,7 @@
 
 // web routes 
 $router->get('/', 'Web\AppController@index');
+$router->get('/home', 'Web\AppController@index');
 $router->get('/home/index', 'Web\AppController@index');
 $router->get('/about', 'Web\AppController@about');
 $router->get('/contact', 'Web\AppController@contact');

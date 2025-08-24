@@ -13,3 +13,7 @@
 </script>
 <script src="/assets/js/tasks/view-task-lists.js"></script>
 
+<?php
+echo $_SESSION['user_id'] ?? 'No user logged in';
+echo '  |  ';
+echo $_SESSION['user_email'] ?? 'No user email set';

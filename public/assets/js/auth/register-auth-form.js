@@ -10,6 +10,7 @@
         return;
       }
 
+      const email = document.getElementById('register-email').value;
       const password = document.getElementById('register-password').value;
       const confirmPassword = document.getElementById('register-confirm-password').value;
 
@@ -18,18 +19,27 @@
         return;
       }
 
-      const formData = new FormData(form);
+      // const formData = new FormData(form);
 
-      try {
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          body: formData
-        });
+      // try {
+      //   const response = await fetch('/api/register', {
+      //     method: 'POST',
+      //     body: formData
+      //   });
+
+            try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, confirmPassword})
+      });
 
         const data = await response.json();
 
         if (response.ok) {
-          window.location.href = '/view/forms/active';
+          window.location.href = '/tasks/view/active';
         } else {
           alert(data.message || 'Registration failed');
         }
