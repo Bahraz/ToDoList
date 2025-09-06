@@ -6,17 +6,19 @@ use Bahraz\ToDoApp\Repositories\UserRepository;
 use Bahraz\ToDoApp\Core\Database;
 use Bahraz\ToDoApp\Entities\User;
 
-
-
-
-use Bahraz\ToDoApp\Models\UserModel;
 class UserController
 {
-    private UserModel $userModel;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $db = new Database();
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $this->userRepository = new UserRepository($db);
     }
 
     private function hashPassword(string $password): string
@@ -37,13 +39,9 @@ class UserController
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
 
-        $db = new Database();
-        $userRepository = new UserRepository($db);
-
-        $user = $userRepository->findUserByEmail($email);
+        $user = $this->userRepository->findUserByEmail($email);
 
         if ($user && $this->verifyPassword($password, $user->getPassword())) {
-            session_start();
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['user_email'] = $user->getEmail();
 
@@ -62,44 +60,30 @@ class UserController
         $password = $input['password'] ?? '';
         $confirmPassword = $input['confirmPassword'] ?? '';
 
-        $db = new Database();
-        $userRepository = new UserRepository($db);
-
-
-        if ($userRepository->findUserByEmail($email)) {
+        if ($this->userRepository->findUserByEmail($email)) {
             echo json_encode(['success' => false, 'message' => 'Email already in use']);
             return;
         }
-
 
         if ($password !== $confirmPassword) {
             echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
             return;
         }
 
-
         $hashedPassword = $this->hashPassword($password);
         $user = new User(null, $email, $hashedPassword);
 
+        $this->userRepository->createUser($user);
 
-        $userRepository->createUser($user);
-
-        session_start();
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();
 
         echo json_encode(['success' => true, 'message' => 'Registration successful']);
     }
-    
 
-    public function logoutUser() {
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+    public function logoutUser(): void
+    {
         $_SESSION = [];
-        
         session_destroy();
 
         header('Content-Type: application/json');

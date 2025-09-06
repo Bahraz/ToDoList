@@ -2,16 +2,24 @@
 
 namespace Bahraz\ToDoApp\Controllers\Api;
 
-use Bahraz\ToDoApp\Models\TaskModel;
+use Bahraz\ToDoApp\Repositories\TaskRepository;
+use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Entities\Task;
+
 class TaskController
 {
-    private TaskModel $taskModel;
+    private TaskRepository $taskRepository;
 
     public function __construct()
     {
-        $this->taskModel = new TaskModel();
+        $db = new Database();
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $this->taskRepository = new TaskRepository($db, $_SESSION['user_id'] ?? 0);
     }
-
 
     public function addTask(): void
     {
@@ -23,6 +31,7 @@ class TaskController
             return;
         }
 
+        $userId = $_SESSION['user_id'] ?? 0;
         $title = $_POST['title'] ?? '';
         $priority = $_POST['priority'] ?? 'normal';
         $date = $_POST['date'] ?? date('Y-m-d');
@@ -33,12 +42,17 @@ class TaskController
             return;
         }
 
-        $success = $this->taskModel->addTask([
-            'title' => $title,
-            'priority' => $priority,
-            'date' => $date,
-            'completed' => 0,
-        ]);
+        $task = new Task(
+            id: null,
+            userId: $userId,
+            title: $title,
+            completed: false,
+            priority: $priority,
+            date: $date,
+            deleted: false
+        );
+
+        $success = $this->taskRepository->addTask($task);
 
         if ($success) {
             http_response_code(201);
@@ -51,6 +65,7 @@ class TaskController
 
     public function updateTask(int $id): void
     {
+        header('Content-Type: application/json');
         $input = json_decode(file_get_contents('php://input'), true);
 
         if (!is_array($input)) {
@@ -59,23 +74,32 @@ class TaskController
             return;
         }
 
-        $fieldsToUpdate = [];
+        $userId = $_SESSION['user_id'] ?? 0;
 
-        foreach (['title', 'completed', 'priority', 'date', 'deleted'] as $field) {
-            if (isset($input[$field])) {
-                $fieldsToUpdate[$field] = ($field === 'completed' || $field === 'deleted')
-                    ? (int)$input[$field]
-                    : $input[$field];
-            }
-        }
-
-        if (empty($fieldsToUpdate)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'No valid fields provided']);
+        $existingTask = $this->taskRepository->getTaskById($id);
+        if (!$existingTask) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Task not found']);
             return;
         }
 
-        if ($this->taskModel->updateTaskById($id, $fieldsToUpdate)) {
+        if (isset($input['title'])) {
+            $existingTask->setTitle($input['title']);
+        }
+        if (isset($input['completed'])) {
+            $existingTask->setCompleted((bool)$input['completed']);
+        }
+        if (isset($input['priority'])) {
+            $existingTask->setPriority($input['priority']);
+        }
+        if (isset($input['date'])) {
+            $existingTask->setDate($input['date']);
+        }
+        if (isset($input['deleted'])) {
+            $existingTask->setDeleted((bool)$input['deleted']);
+        }
+
+        if ($this->taskRepository->updateTask($id, $existingTask)) {
             http_response_code(200);
             echo json_encode(['message' => 'Task updated']);
         } else {
