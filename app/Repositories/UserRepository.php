@@ -27,12 +27,17 @@ class UserRepository implements UserRepositoryInterface{
         return null;
     }
         
-    public function createUser(string $email, string $hashedPassword): bool
-    {
-        return $this->db->query(
-            "INSERT INTO users (email, password) VALUES (:email, :password)", 
-            [':email' => $email, ':password' => $hashedPassword]
-        );
-    }
+    public function createUser(User $user): void 
+{
+    $this->db->query(
+        "INSERT INTO users (email, password) VALUES (:email, :password)",
+        [
+            ':email' => $user->getEmail(),
+            ':password' => $user->getPassword()
+        ]
+    );
+
+    $user->setId((int)$this->db->lastInsertId());
+}
 
 }
