@@ -69,7 +69,7 @@ class TaskModel
         ) ?? [];
     }
 
-    public function addTask(array $data): bool
+    public function addTask(array $data): \PDOStatement|false
     {
         return $this->db->query(
             "INSERT INTO tasks (user_id, title, completed, priority, date, deleted) 
@@ -85,7 +85,7 @@ class TaskModel
         );
     }
 
-    public function updateTaskById(int $id, array $fields): bool
+    public function updateTaskById(int $id, array $fields): \PDOStatement|false
     {
         $allowedFields = ['title', 'completed', 'priority', 'date', 'deleted'];
         $setParts = [];
@@ -104,15 +104,11 @@ class TaskModel
             }
         }
 
-        if (empty($setParts)) {
-            return false;
-        }
-
         $sql = "UPDATE tasks SET " . implode(', ', $setParts) . " WHERE id = :id AND user_id = :user_id";
         return $this->db->query($sql, $params);
     }
 
-    public function deleteTask(int $id): bool
+    public function deleteTask(int $id): \PDOStatement|false
     {
         return $this->db->query(
             "UPDATE tasks SET deleted = 1 WHERE id = :id AND user_id = :user_id",

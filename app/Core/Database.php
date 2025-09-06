@@ -4,6 +4,7 @@ namespace Bahraz\ToDoApp\Core;
 
 use PDO;
 use PDOException;
+use PDOStatement;
 use RuntimeException;
 
 class Database {
@@ -27,10 +28,11 @@ class Database {
         return $this->connection;
     }
 
-    public function query(string $sql, array $params = []): bool
+    public function query(string $sql, array $params = []): \PDOStatement
     {
         $stmt = $this->connection->prepare($sql);
-        return $stmt->execute($params);
+        $stmt->execute($params);
+        return $stmt;
     }
 
     public function fetch(string $sql, array $params = []): ?array 
@@ -71,6 +73,11 @@ class Database {
 
         return $stmt->fetchAll(PDO::FETCH_CLASS, $class);
     }
+
+    // public function rowCount(PDOStatement $stmt): int {
+    //     return $stmt->rowCount();
+    // }
+
 
     public function lastInsertId(): string 
     {

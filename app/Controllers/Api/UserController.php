@@ -29,66 +29,67 @@ class UserController
         return password_verify($password, $hashedPassword);
     }
 
-public function loginUser() {
-    header('Content-Type: application/json');
+    public function loginUser(): void
+    {
+        header('Content-Type: application/json');
 
-    $input = json_decode(file_get_contents('php://input'), true);
-    $email = strtolower($input['email'] ?? '');
-    $password = $input['password'] ?? '';
+        $input = json_decode(file_get_contents('php://input'), true);
+        $email = strtolower($input['email'] ?? '');
+        $password = $input['password'] ?? '';
 
-    $db = new Database();
-    $userRepository = new UserRepository($db);
+        $db = new Database();
+        $userRepository = new UserRepository($db);
 
-    $user = $userRepository->findUserByEmail($email);
+        $user = $userRepository->findUserByEmail($email);
 
-    if ($user && $this->verifyPassword($password, $user->getPassword())) {
+        if ($user && $this->verifyPassword($password, $user->getPassword())) {
+            session_start();
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['user_email'] = $user->getEmail();
+
+            echo json_encode(['success' => true, 'message' => 'Login successful']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+        }
+    }
+
+    public function registerUser(): void
+    {
+        header('Content-Type: application/json');
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        $email = strtolower($input['email'] ?? '');
+        $password = $input['password'] ?? '';
+        $confirmPassword = $input['confirmPassword'] ?? '';
+
+        $db = new Database();
+        $userRepository = new UserRepository($db);
+
+
+        if ($userRepository->findUserByEmail($email)) {
+            echo json_encode(['success' => false, 'message' => 'Email already in use']);
+            return;
+        }
+
+
+        if ($password !== $confirmPassword) {
+            echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
+            return;
+        }
+
+
+        $hashedPassword = $this->hashPassword($password);
+        $user = new User(null, $email, $hashedPassword);
+
+
+        $userRepository->createUser($user);
+
         session_start();
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();
 
-        echo json_encode(['success' => true, 'message' => 'Login successful']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+        echo json_encode(['success' => true, 'message' => 'Registration successful']);
     }
-}
-
-public function registerUser()
-{
-    header('Content-Type: application/json');
-
-    $input = json_decode(file_get_contents('php://input'), true);
-    $email = strtolower($input['email'] ?? '');
-    $password = $input['password'] ?? '';
-    $confirmPassword = $input['confirmPassword'] ?? '';
-
-    $db = new Database();
-    $userRepository = new UserRepository($db);
-
-
-    if ($userRepository->findUserByEmail($email)) {
-        echo json_encode(['success' => false, 'message' => 'Email already in use']);
-        return;
-    }
-
-
-    if ($password !== $confirmPassword) {
-        echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
-        return;
-    }
-
-
-    $hashedPassword = $this->hashPassword($password);
-    $user = new User(null, $email, $hashedPassword);
-
-
-    $userRepository->createUser($user);
-
-    session_start();
-    $_SESSION['user_id'] = $user->getId();
-    $_SESSION['user_email'] = $user->getEmail();
-
-    echo json_encode(['success' => true, 'message' => 'Registration successful']);
-}
     
 
     public function logoutUser() {
