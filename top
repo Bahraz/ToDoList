@@ -1,0 +1,77 @@
+[33mceaa75e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/implement-repository[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/login-register-system[m[33m, [m[1;31morigin/feature/implement-repository[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m, [m[1;32mfeature/login-register-system[m[33m, [m[1;32mdevelop[m[33m)[m merge projec
+[33m899eb27[m refactor: Database class and update task/user models and controllers.
+[33m76fa19b[m fix: session handling and page display
+[33m6d4fb33[m feat: setting session after register
+[33m7a78674[m feat: add session and logout
+[33maa299f4[m feat: implement user registration and login
+[33m185acc2[m Merge pull request #24 from Bahraz/main
+[33mcbb8094[m Merge pull request #23 from Bahraz/feature/login-register-system
+[33m685e83e[m Merge pull request #22 from Bahraz/main
+[33m226bb2e[m fix: unify namespaces and correct API routes
+[33m02917d4[m Merge branch 'main' of https://github.com/Bahraz/ToDoList
+[33m212bf54[m refactor: router
+[33m61d8fa6[m Merge branch 'main' of https://github.com/Bahraz/ToDoList
+[33m7436a86[m refactor: logic router
+[33m4087b5d[m Merge branch 'main' of https://github.com/Bahraz/ToDoList
+[33m44b2cb6[m fix: login js
+[33mb5486f3[m Merge pull request #21 from Bahraz/develop
+[33m6ed8a8c[m Merge pull request #20 from Bahraz/feature/login-register-system
+[33me23f08d[m Merge pull request #19 from Bahraz/main
+[33mc15ba1e[m Merge pull request #18 from Bahraz/feature/login-register-system
+[33mf86e77f[m Merge branch 'feature/login-register-system' into develop
+[33m9bc3dfe[m refactor: router logic
+[33me0f8dc3[m refactor: add js logic for forms and task lists
+[33m9c32bb8[m add: login | register form
+[33m16e4af8[m deleted zip file
+[33me0a5c9b[m Merge pull request #17 from Bahraz/develop
+[33m82f0ba0[m add: PDO Exception and RuntimeException to Model
+[33mf3d773c[m Merge pull request #16 from Bahraz/develop
+[33m9915f96[m add: TaskController, add function in TaskModel, rebuild routing
+[33m8c918ef[m Merge pull request #15 from Bahraz/develop
+[33mb31fb53[m fix: task model
+[33m38c4ae1[m add: Database connection and Task Model
+[33m8192351[m Merge pull request #14 from Bahraz/develop
+[33m06d0bbb[m Refactor API to RESTfl style with full CRUD support
+[33m7fa69d1[m Merge pull request #13 from Bahraz/develop
+[33m9db358e[m add: view routing with status handling and form
+[33m43ffc70[m Merge pull request #12 from Bahraz/develop
+[33m82810c7[m add: ajax for task viewing
+[33m80e207d[m add: ajax for task adding
+[33m60ad314[m Merge pull request #11 from Bahraz/develop
+[33m7c694e2[m feat(tasks): add API for complete/delete and status-filtered views
+[33m827db10[m Merge pull request #10 from Bahraz/develop
+[33m387a5fa[m add 'addtask' api.
+[33mf3e12e5[m Merge pull request #9 from Bahraz/develop
+[33madb1a2f[m add API endpoint for fetching tasks
+[33ma846835[m refacor task deletion and support for marking tasks as active again
+[33mc5e7b42[m Merge pull request #8 from Bahraz/develop
+[33m1afd520[m refactor active task view
+[33md0e09a5[m add task functionality
+[33mf9a13c2[m add controller method to display task
+[33me73afd4[m Merge pull request #7 from Bahraz/develop
+[33ma9e4c6c[m refactor controller for app, add BaseController
+[33m5ef2a27[m feat: update layout for viewTaskComponent
+[33meea06f2[m delete comments
+[33maaebf68[m feat: update layout for addTaskComponent
+[33m2f7d41c[m update header layout for navigation bar
+[33m5065158[m add contact page
+[33mf541b75[m add about page
+[33mb8e0982[m Merge pull request #6 from Bahraz/develop
+[33mf14b356[m Add addTaskComponent and viewTaskComponent; update AppController to use them
+[33m363c57a[m fix .htaccess and rebuild docker
+[33mc292e03[m rebuild project, fix some things
+[33m3be8294[m rebuild project, fix some things
+[33mc98a83f[m Add Bootstrap integration, styled footer, and partial navbar
+[33m1610dd3[m add: favicon.svg
+[33m68aec56[m Merge pull request #5 from Bahraz/develop
+[33m2aedb45[m feat: add Bootstrap, favicon and environment variable support
+[33m352a5ec[m feat: add Bootstrap, favicon and environment variable support
+[33m847d60d[m Merge pull request #4 from Bahraz/develop
+[33m7983e66[m add .env
+[33m61b0866[m Merge pull request #3 from Bahraz/develop
+[33mf10b895[m change in .gitignore
+[33md4607b8[m Merge pull request #2 from Bahraz/develop
+[33m54f0eb2[m initial initial commit with MVC structure
+[33m848578c[m Merge pull request #1 from Bahraz/develop
+[33m1bfd70a[m test commit
+[33m75772a4[m first commit

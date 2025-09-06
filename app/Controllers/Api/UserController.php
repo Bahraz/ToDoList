@@ -2,6 +2,13 @@
 
 namespace Bahraz\ToDoApp\Controllers\Api;
 
+use Bahraz\ToDoApp\Repositories\UserRepository;
+use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Entities\User;
+
+
+
+
 use Bahraz\ToDoApp\Models\UserModel;
 class UserController
 {
@@ -12,26 +19,39 @@ class UserController
         $this->userModel = new UserModel();
     }
 
-    public function loginUser() {
-        header('Content-Type: application/json');
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        $email = strtolower($input['email'] ?? '');
-        $password = $input['password'] ?? '';
-
-        $user = $this->userModel->findUserByEmail($email);
-
-        if ($user && $this->userModel->verifyUserPassword($password, $user['password'])) {
-            session_start();
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-
-            echo json_encode(['success' => true, 'message' => 'Login successful']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
-        }
+    private function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
     }
+
+    private function verifyPassword(string $password, string $hashedPassword): bool
+    {
+        return password_verify($password, $hashedPassword);
+    }
+
+public function loginNewUser() {
+    header('Content-Type: application/json');
+
+    $input = json_decode(file_get_contents('php://input'), true);
+    $email = strtolower($input['email'] ?? '');
+    $password = $input['password'] ?? '';
+
+    $db = new Database();
+    $userRepository = new UserRepository($db);
+
+    $user = $userRepository->findUserByEmail($email);
+
+    if ($user && $this->verifyPassword($password, $user->getPassword())) {
+        session_start();
+        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['user_email'] = $user->getEmail();
+
+        echo json_encode(['success' => true, 'message' => 'Login successful']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+    }
+}
+
 
 
     public function registerUser() {

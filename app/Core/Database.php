@@ -48,6 +48,30 @@ class Database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    
+    public function fetchObject(string $sql, array $params = [], string $class): ?object{
+        $stmt= $this->connection->prepare($sql);
+        $stmt->execute($params);
+
+        if (!class_exists($class)) {
+            return null;
+        }
+    
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $class);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function fetchAllObjects(string $sql, array $params = [], string $class): array {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($params);
+
+        if (!class_exists($class)) {
+            return [];
+        }
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, $class);
+    }
+
     public function lastInsertId(): string 
     {
         return $this->connection->lastInsertId();
