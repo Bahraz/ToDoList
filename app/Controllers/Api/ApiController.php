@@ -1,16 +1,24 @@
 <?php
+
 namespace Bahraz\ToDoApp\Controllers\Api;
 
-use Bahraz\ToDoApp\Models\TaskModel;
-use Bahraz\ToDoApp\Controllers\Api\TaskController;
+use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Repositories\TaskRepository;
 
-class ApiController extends TaskController
+class ApiController
 {
-    private TaskModel $taskModel;
+    private TaskRepository $taskRepository;
 
     public function __construct()
     {
-        $this->taskModel = new TaskModel();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $userId = $_SESSION['user_id'] ?? 0;
+
+        $db = new Database();
+        $this->taskRepository = new TaskRepository($db, $userId);
     }
 
     public function index(): void
@@ -21,19 +29,19 @@ class ApiController extends TaskController
 
         switch ($status) {
             case 'all':
-                $tasks = $this->taskModel->getAllNotDeletedTasks();
+                $tasks = $this->taskRepository->getAllNotDeletedTasks();
                 break;
             case 'active':
-                $tasks = $this->taskModel->getActiveTasks();
+                $tasks = $this->taskRepository->getActiveTasks();
                 break;
             case 'today':
-                $tasks = $this->taskModel->getTodayTasks();
+                $tasks = $this->taskRepository->getTodayTasks();
                 break;
             case 'completed':
-                $tasks = $this->taskModel->getCompletedTasks();
+                $tasks = $this->taskRepository->getCompletedTasks();
                 break;
             case 'deleted':
-                $tasks = $this->taskModel->getDeletedTasks();
+                $tasks = $this->taskRepository->getDeletedTasks();
                 break;
             default:
                 http_response_code(400);
@@ -41,6 +49,14 @@ class ApiController extends TaskController
                 return;
         }
 
-        echo json_encode(array_values($tasks));
+        echo json_encode(array_map(fn($task) => [
+            'id' => $task->getId(),
+            'user_id' => $task->getUserId(),
+            'title' => $task->getTitle(),
+            'completed' => $task->getCompleted(),
+            'priority' => $task->getPriority(),
+            'date' => $task->getDate(),
+            'deleted' => $task->getDeleted()
+        ], $tasks));
     }
 }
