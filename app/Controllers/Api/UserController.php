@@ -34,17 +34,23 @@ class UserController
     public function loginUser(): void
     {
         header('Content-Type: application/json');
-
+        
         $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+            return;
+        }
+
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
-
+        
         $user = $this->userRepository->findUserByEmail($email);
-
+        
         if ($user && $this->verifyPassword($password, $user->getPassword())) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['user_email'] = $user->getEmail();
-
+            
             echo json_encode(['success' => true, 'message' => 'Login successful']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
@@ -56,6 +62,12 @@ class UserController
         header('Content-Type: application/json');
 
         $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+            return;
+        }
+
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
         $confirmPassword = $input['confirmPassword'] ?? '';
