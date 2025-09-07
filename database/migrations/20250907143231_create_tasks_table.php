@@ -14,8 +14,6 @@ final class CreateTasksTable extends AbstractMigration
               ->addColumn('priority', 'enum', ['values' => ['low','normal','high'], 'default' => 'normal', 'null' => false])
               ->addColumn('date', 'date', ['null' => false])
               ->addColumn('deleted', 'boolean', ['default' => 0, 'null' => false])
-              ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
-              ->addColumn('updated_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP', 'update' => 'CURRENT_TIMESTAMP'])
               ->addForeignKey('user_id', 'users', 'id', ['delete'=> 'CASCADE', 'update'=> 'NO_ACTION'])
               ->create();
     }
