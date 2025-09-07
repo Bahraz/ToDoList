@@ -1,9 +1,19 @@
 <?php 
-if(isset($_SESSION['user_id'])) {
-    header('Location: /tasks/view/active');
-    exit;
-}
-?><form class="row justify-content-center needs-validation" id="login-form" novalidate>
+  if(isset($_SESSION['user_id'])) {
+      header('Location: /tasks/view/active');
+      exit;
+  }
+
+  if(session_status() === PHP_SESSION_NONE) {
+      session_start();
+  }
+
+?>
+
+<form class="row justify-content-center needs-validation" id="login-form" novalidate>
+
+  <input type="hidden" name="csrf_token" value="<?= \Bahraz\ToDoApp\Core\Csrf::generateCsrf() ?>">
+
   <div class="col-md-6 col-sm-10 p-4 border rounded shadow-sm">
     <h3 class="text-center mb-4">Login</h3>
 
