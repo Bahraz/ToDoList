@@ -2,48 +2,77 @@
 
 namespace Bahraz\ToDoApp\Controllers\Api;
 
-use Bahraz\ToDoApp\Models\UserModel;
+use Bahraz\ToDoApp\Repositories\UserRepository;
+use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Entities\User;
+
 class UserController
 {
-    private UserModel $userModel;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $db = new Database();
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $this->userRepository = new UserRepository($db);
     }
 
-    public function loginUser() {
-        header('Content-Type: application/json');
+    private function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
 
+    private function verifyPassword(string $password, string $hashedPassword): bool
+    {
+        return password_verify($password, $hashedPassword);
+    }
+
+    public function loginUser(): void
+    {
+        header('Content-Type: application/json');
+        
         $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+            return;
+        }
 
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
-
-        $user = $this->userModel->findUserByEmail($email);
-
-        if ($user && $this->userModel->verifyUserPassword($password, $user['password'])) {
-            session_start();
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-
+        
+        $user = $this->userRepository->findUserByEmail($email);
+        
+        if ($user && $this->verifyPassword($password, $user->getPassword())) {
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['user_email'] = $user->getEmail();
+            
             echo json_encode(['success' => true, 'message' => 'Login successful']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
         }
     }
 
-
-    public function registerUser() {
+    public function registerUser(): void
+    {
         header('Content-Type: application/json');
 
         $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+            return;
+        }
 
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
         $confirmPassword = $input['confirmPassword'] ?? '';
 
-        if ($this->userModel->findUserByEmail($email)) {
+        if ($this->userRepository->findUserByEmail($email)) {
             echo json_encode(['success' => false, 'message' => 'Email already in use']);
             return;
         }
@@ -53,32 +82,20 @@ class UserController
             return;
         }
 
-        $hashedPassword = $this->userModel->hashPassword($password);
+        $hashedPassword = $this->hashPassword($password);
+        $user = new User(null, $email, $hashedPassword);
 
-        $userId = $this->userModel->createUser($email, $hashedPassword);
+        $this->userRepository->createUser($user);
 
-        if ($userId) {
-            session_start();
+        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['user_email'] = $user->getEmail();
 
-            $user = $this->userModel->findUserByEmail($email);
-
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-
-            echo json_encode(['success' => true, 'message' => 'Registration successful']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Registration failed']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Registration successful']);
     }
 
-        public function logoutUser() {
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+    public function logoutUser(): void
+    {
         $_SESSION = [];
-        
         session_destroy();
 
         header('Content-Type: application/json');

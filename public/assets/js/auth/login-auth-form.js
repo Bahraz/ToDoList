@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, csrf_token: document.querySelector('input[name="csrf_token"]').value })
       });
 
       const data = await response.json();
