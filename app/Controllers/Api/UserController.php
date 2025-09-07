@@ -63,6 +63,12 @@ class UserController
         header('Content-Type: application/json');
 
         $input = json_decode(file_get_contents('php://input'), true);
+
+                if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+            return;
+        }
+
         $email = strtolower($input['email'] ?? '');
         $password = $input['password'] ?? '';
         $confirmPassword = $input['confirmPassword'] ?? '';

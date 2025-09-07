@@ -3,11 +3,6 @@
       header('Location: /tasks/view/active');
       exit;
   }
-
-  if(session_status() === PHP_SESSION_NONE) {
-      session_start();
-  }
-
 ?>
 
 <form class="row justify-content-center needs-validation" id="login-form" novalidate>
