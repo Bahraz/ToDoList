@@ -1,4 +1,7 @@
 <form class="row justify-content-center mb-5" id="add-task-form">
+
+  <input type="hidden" name="csrf_token" value="<?= \Bahraz\ToDoApp\Core\Csrf::generateCsrf() ?>">
+
   <div class="col-md-6 col-sm-8">
     <label for="task-input" class="form-label">Add a new task</label>
     <div class="input-group mb-3">
@@ -31,9 +34,6 @@
   </div>
 </form>
 
-<!-- <script>
-  window.taskStatus = <?= json_encode($status ?? 'all') ?>;
-</script> -->
 <script src="/assets/js/tasks/add-task-form.js"></script>
 
 

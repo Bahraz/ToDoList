@@ -4,7 +4,6 @@ namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Repositories\UserRepository;
 use Bahraz\ToDoApp\Core\Database;
-use Bahraz\ToDoApp\Core\Csrf;
 use Bahraz\ToDoApp\Entities\User;
 
 class UserController
@@ -64,7 +63,7 @@ class UserController
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-                if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
             echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
             return;
         }

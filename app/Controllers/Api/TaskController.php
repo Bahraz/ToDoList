@@ -31,6 +31,14 @@ class TaskController
             return;
         }
 
+        $csrfToken = $_POST['csrf_token'] ?? '';
+
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($csrfToken)) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid CSRF token']);
+            return;
+        }
+
         $userId = $_SESSION['user_id'] ?? 0;
         $title = $_POST['title'] ?? '';
         $priority = $_POST['priority'] ?? 'normal';
