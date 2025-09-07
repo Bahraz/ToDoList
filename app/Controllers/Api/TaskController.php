@@ -35,7 +35,7 @@ class TaskController
 
         if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($csrfToken)) {
             http_response_code(400);
-            echo json_encode(['message' => 'Invalid CSRF token']);
+            echo json_encode(['error' => 'Invalid CSRF token']);
             return;
         }
 
@@ -74,7 +74,16 @@ class TaskController
     public function updateTask(int $id): void
     {
         header('Content-Type: application/json');
+
         $input = json_decode(file_get_contents('php://input'), true);
+
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($csrfToken)) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid CSRF token']);
+            return;
+        }
+
 
         if (!is_array($input)) {
             http_response_code(400);
