@@ -1,5 +1,8 @@
 const taskStatus = window.taskStatus || 'all';
 
+const listEl = document.getElementById('task-list');
+const csrfToken = listEl.dataset.csrf;
+
 async function loadTasks() {
   const listEl = document.getElementById('task-list');
   listEl.innerHTML = '<li class="list-group-item text-center">Loading tasks...</li>';
@@ -112,7 +115,10 @@ document.addEventListener('click', async function (e) {
   try {
     const response = await fetch(`/api/tasks/${taskId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      },
       body: body,
     });
 
