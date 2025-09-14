@@ -39,7 +39,7 @@ class UserController
         
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!TokenCsrf::validateCsrf($input['csrf_token'] ?? '')) {
+        if (!TokenCsrf::validateCsrf($input['TokenCsrf'] ?? '')) {
             JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
@@ -65,7 +65,7 @@ class UserController
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!TokenCsrf::validateCsrf($input['csrf_token'] ?? '')) {
+        if (!TokenCsrf::validateCsrf($input['TokenCsrf'] ?? '')) {
             JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
@@ -101,6 +101,6 @@ class UserController
         session_destroy();
 
         header('Content-Type: application/json');
-        JsonResponse::success(['message' => 'Logout successful'], 204);
+        JsonResponse::success(['message' => 'Logout successful'], 202);
     }
 }
