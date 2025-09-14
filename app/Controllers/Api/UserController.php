@@ -4,6 +4,8 @@ namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Repositories\UserRepository;
 use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Core\TokenCsrf;
+use Bahraz\ToDoApp\Core\JsonResponse;
 use Bahraz\ToDoApp\Entities\User;
 
 class UserController
@@ -37,8 +39,8 @@ class UserController
         
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
-            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+        if (!TokenCsrf::validateCsrf($input['csrf_token'] ?? '')) {
+            JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
 
@@ -50,10 +52,10 @@ class UserController
         if ($user && $this->verifyPassword($password, $user->getPassword())) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['user_email'] = $user->getEmail();
-            
-            echo json_encode(['success' => true, 'message' => 'Login successful']);
+
+            JsonResponse::success(['message' => 'Login successful'], 200);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+            JsonResponse::error('Invalid email or password.', 401);
         }
     }
 
@@ -63,8 +65,8 @@ class UserController
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($input['csrf_token'] ?? '')) {
-            echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+        if (!TokenCsrf::validateCsrf($input['csrf_token'] ?? '')) {
+            JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
 
@@ -73,12 +75,12 @@ class UserController
         $confirmPassword = $input['confirmPassword'] ?? '';
 
         if ($this->userRepository->findUserByEmail($email)) {
-            echo json_encode(['success' => false, 'message' => 'Email already in use']);
+            JsonResponse::error('Email already in use', 409);
             return;
         }
 
         if ($password !== $confirmPassword) {
-            echo json_encode(['success' => false, 'message' => 'Passwords do not match']);
+            JsonResponse::error('Passwords do not match', 422);
             return;
         }
 
@@ -90,7 +92,7 @@ class UserController
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['user_email'] = $user->getEmail();
 
-        echo json_encode(['success' => true, 'message' => 'Registration successful']);
+        JsonResponse::success(['message' => 'Registration successful'], 201);
     }
 
     public function logoutUser(): void
@@ -99,6 +101,6 @@ class UserController
         session_destroy();
 
         header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Logout successful']);
+        JsonResponse::success(['message' => 'Logout successful'], 204);
     }
 }

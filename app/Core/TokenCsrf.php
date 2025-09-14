@@ -2,7 +2,7 @@
 
 namespace Bahraz\ToDoApp\Core;
 
-class Csrf
+class TokenCsrf
 {
     public static function generateCsrf(): string
     {

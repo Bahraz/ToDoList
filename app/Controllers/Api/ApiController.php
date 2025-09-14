@@ -3,27 +3,31 @@
 namespace Bahraz\ToDoApp\Controllers\Api;
 
 use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Core\JsonResponse;
 use Bahraz\ToDoApp\Repositories\TaskRepository;
 
 class ApiController
 {
     private TaskRepository $taskRepository;
-
+    private int $userId;
+    
     public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        $userId = $_SESSION['user_id'] ?? 0;
+        $this->userId = $_SESSION['user_id'] ?? 0;
 
+        if (!$this->userId) {
+            JsonResponse::error('Unauthorized', 401);
+        }
         $db = new Database();
-        $this->taskRepository = new TaskRepository($db, $userId);
+        $this->taskRepository = new TaskRepository($db, $this->userId);
     }
 
     public function index(): void
     {
-        header('Content-Type: application/json');
 
         $status = $_GET['status'] ?? 'all';
 
@@ -44,8 +48,7 @@ class ApiController
                 $tasks = $this->taskRepository->getDeletedTasks();
                 break;
             default:
-                http_response_code(400);
-                echo json_encode(['error' => 'Invalid status']);
+                JsonResponse::error('Invalid status', 400);
                 return;
         }
 

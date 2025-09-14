@@ -30,11 +30,12 @@
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (data.status === 'success') {
           window.location.href = '/tasks/view/active';
         } else {
-          alert(data.message || 'Registration failed');
+          alert(data.message || data.data?.message || 'Registration failed');
         }
+
       } catch (err) {
         alert('A network error occurred.');
         console.error(err);
