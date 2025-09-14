@@ -2,9 +2,11 @@
 
 namespace Bahraz\ToDoApp\Controllers\Api;
 
-use Bahraz\ToDoApp\Repositories\TaskRepository;
 use Bahraz\ToDoApp\Core\Database;
+use Bahraz\ToDoApp\Core\TokenCsrf;
+use Bahraz\ToDoApp\Core\JsonResponse;
 use Bahraz\ToDoApp\Entities\Task;
+use Bahraz\ToDoApp\Repositories\TaskRepository;
 
 class TaskController
 {
@@ -26,16 +28,14 @@ class TaskController
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method Not Allowed']);
+            JsonResponse::error('Method Not Allowed', 405);
             return;
         }
 
         $csrfToken = $_POST['csrf_token'] ?? '';
 
-        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($csrfToken)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid CSRF token']);
+        if (!TokenCsrf::validateCsrf($csrfToken)) {
+            JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
 
@@ -45,8 +45,7 @@ class TaskController
         $date = $_POST['date'] ?? date('Y-m-d');
 
         if (empty($title)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Title is required']);
+            JsonResponse::error('Title is required.', 422);
             return;
         }
 
@@ -63,11 +62,9 @@ class TaskController
         $success = $this->taskRepository->addTask($task);
 
         if ($success) {
-            http_response_code(201);
-            echo json_encode(['message' => 'Task added successfully']);
+            JsonResponse::success(['message' => 'Task added successfully'], 201);
         } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add task']);
+            JsonResponse::error('Failed to add task', 500);
         }
     }
 
@@ -78,16 +75,14 @@ class TaskController
         $input = json_decode(file_get_contents('php://input'), true);
 
         $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-        if (!\Bahraz\ToDoApp\Core\Csrf::validateCsrf($csrfToken)) {
-            http_response_code(400);
-            echo json_encode(['message' => 'Invalid CSRF token']);
+        if (!TokenCsrf::validateCsrf($csrfToken)) {
+            JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
 
 
         if (!is_array($input)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid JSON']);
+            JsonResponse::error('Invalid JSON', 400);
             return;
         }
 
@@ -95,8 +90,7 @@ class TaskController
 
         $existingTask = $this->taskRepository->getTaskById($id);
         if (!$existingTask) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Task not found']);
+            JsonResponse::error('Task not found', 404);
             return;
         }
 
@@ -117,11 +111,9 @@ class TaskController
         }
 
         if ($this->taskRepository->updateTask($id, $existingTask)) {
-            http_response_code(200);
-            echo json_encode(['message' => 'Task updated']);
+            JsonResponse::success(['message' => 'Task updated successfully'], 200);
         } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to update task']);
+            JsonResponse::error('Failed to update task', 500);
         }
     }
 }

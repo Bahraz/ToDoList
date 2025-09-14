@@ -14,25 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password, csrf_token: document.querySelector('input[name="csrf_token"]').value })
-      });
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password, csrf_token: document.querySelector('input[name="csrf_token"]').value })
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.success) {
-        window.location.href = '/tasks/view/active';
-      } else {
-        showAlert(data.message);
+        if (data.status === 'success') {
+          console.log('Login successful:', data);
+          showAlert(data.message);
+          // window.location.href = '/tasks/view/active';
+        } else {
+          showAlert(data.message ?? 'Unexpected error');
+        }
+
+      } catch (err) {
+        console.error('Login error:', err);
+        showAlert('Error connecting to the server.');
       }
-
-    } catch (err) {
-      console.error('Login error:', err);
-      showAlert('Error connecting to the server.');
-    }
   });
 
   function showAlert(message) {
