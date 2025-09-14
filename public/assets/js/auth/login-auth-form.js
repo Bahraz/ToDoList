@@ -18,15 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email, password, csrf_token: document.querySelector('input[name="csrf_token"]').value })
+          body: JSON.stringify({ email, password, TokenCsrf: document.querySelector('input[name="TokenCsrf"]').value })
         });
 
         const data = await response.json();
 
         if (data.status === 'success') {
-          console.log('Login successful:', data);
-          showAlert(data.message);
-          // window.location.href = '/tasks/view/active';
+          window.location.href = '/tasks/view/active';
         } else {
           showAlert(data.message ?? 'Unexpected error');
         }

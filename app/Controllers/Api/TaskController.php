@@ -32,7 +32,7 @@ class TaskController
             return;
         }
 
-        $csrfToken = $_POST['csrf_token'] ?? '';
+        $csrfToken = $_POST['TokenCsrf'] ?? '';
 
         if (!TokenCsrf::validateCsrf($csrfToken)) {
             JsonResponse::error('Invalid CSRF token.', 403);
@@ -74,7 +74,7 @@ class TaskController
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        $csrfToken = $_SERVER['HTTP_X_TokenCsrf'] ?? '';
         if (!TokenCsrf::validateCsrf($csrfToken)) {
             JsonResponse::error('Invalid CSRF token.', 403);
             return;

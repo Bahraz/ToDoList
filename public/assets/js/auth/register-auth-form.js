@@ -25,7 +25,7 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password, confirmPassword, csrf_token: document.querySelector('input[name="csrf_token"]').value })
+        body: JSON.stringify({ email, password, confirmPassword, TokenCsrf: document.querySelector('input[name="TokenCsrf"]').value })
       });
 
         const data = await response.json();

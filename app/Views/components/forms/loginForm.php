@@ -3,11 +3,12 @@
       header('Location: /tasks/view/active');
       exit;
   }
+  use Bahraz\ToDoApp\Core\TokenCsrf;
 ?>
 
 <form class="row justify-content-center needs-validation" id="login-form" novalidate>
 
-  <input type="hidden" name="csrf_token" value="<?= \Bahraz\ToDoApp\Core\Csrf::generateCsrf() ?>">
+  <input type="hidden" name="TokenCsrf" value="<?= TokenCsrf::generateCsrf() ?>">
 
   <div class="col-md-6 col-sm-10 p-4 border rounded shadow-sm">
     <h3 class="text-center mb-4">Login</h3>
