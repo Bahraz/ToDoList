@@ -39,7 +39,7 @@ class UserController
         
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!TokenCsrf::validateCsrf($input['TokenCsrf'] ?? '')) {
+        if (!TokenCsrf::verifyCsrf($input['TokenCsrf'] ?? '')) {
             JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
@@ -65,7 +65,7 @@ class UserController
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!TokenCsrf::validateCsrf($input['TokenCsrf'] ?? '')) {
+        if (!TokenCsrf::verifyCsrf($input['TokenCsrf'] ?? '')) {
             JsonResponse::error('Invalid CSRF token.', 403);
             return;
         }
