@@ -40,9 +40,9 @@ class UserController
         
         $user = $this->userRepository->findUserByEmail($email);
         
-        if ($user && Auth::verifyPassword($password, $user->getPassword())) {
-            $_SESSION['user_id'] = $user->getId();
-            $_SESSION['user_email'] = $user->getEmail();
+        if ($user && Auth::verifyPassword($password, $user->getPassword())) 
+        {
+            Auth::login($user->getId(), $user->getEmail());
 
             JsonResponse::success(['message' => 'Login successful'], 200);
         } else {
@@ -78,18 +78,21 @@ class UserController
         $hashedPassword = Auth::hashPassword($password);
         $user = new User(null, $email, $hashedPassword);
 
-        $this->userRepository->createUser($user);
+        try{
+            $this->userRepository->createUser($user);
+        } catch (\Exception $e) {
+            JsonResponse::error("Failed to create user", 500);
+            return;
+        }
 
-        $_SESSION['user_id'] = $user->getId();
-        $_SESSION['user_email'] = $user->getEmail();
+        Auth::login($user->getId(), $user->getEmail());
 
         JsonResponse::success(['message' => 'Registration successful'], 201);
     }
 
     public function logoutUser(): void
     {
-        $_SESSION = [];
-        session_destroy();
+        Auth::logout();
 
         header('Content-Type: application/json');
         JsonResponse::success(['message' => 'Logout successful'], 202);
