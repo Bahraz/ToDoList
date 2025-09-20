@@ -6,6 +6,7 @@ use Bahraz\ToDoApp\Repositories\UserRepository;
 use Bahraz\ToDoApp\Core\Database;
 use Bahraz\ToDoApp\Core\TokenCsrf;
 use Bahraz\ToDoApp\Core\JsonResponse;
+use Bahraz\ToDoApp\Core\Auth;
 use Bahraz\ToDoApp\Entities\User;
 
 class UserController
@@ -22,17 +23,7 @@ class UserController
         
         $this->userRepository = new UserRepository($db);
     }
-
-    private function hashPassword(string $password): string
-    {
-        return password_hash($password, PASSWORD_BCRYPT);
-    }
-
-    private function verifyPassword(string $password, string $hashedPassword): bool
-    {
-        return password_verify($password, $hashedPassword);
-    }
-
+    
     public function loginUser(): void
     {
         header('Content-Type: application/json');
@@ -49,7 +40,7 @@ class UserController
         
         $user = $this->userRepository->findUserByEmail($email);
         
-        if ($user && $this->verifyPassword($password, $user->getPassword())) {
+        if ($user && Auth::verifyPassword($password, $user->getPassword())) {
             $_SESSION['user_id'] = $user->getId();
             $_SESSION['user_email'] = $user->getEmail();
 
@@ -84,7 +75,7 @@ class UserController
             return;
         }
 
-        $hashedPassword = $this->hashPassword($password);
+        $hashedPassword = Auth::hashPassword($password);
         $user = new User(null, $email, $hashedPassword);
 
         $this->userRepository->createUser($user);
