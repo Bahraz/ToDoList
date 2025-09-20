@@ -24,9 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
 
         if (data.status === 'success') {
-          window.location.href = '/tasks/view/active';
+          console.log('Redirecting to tasks page...');
+          window.location.replace('/tasks/view/active');
         } else {
-          showAlert(data.message ?? 'Unexpected error');
+          showAlert(data.data?.message ?? data.message ?? 'Unexpected error');
         }
 
       } catch (err) {
